@@ -1,0 +1,1193 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Одна буква решает · демо</title>
+<meta name="description" content="Тренажёр иврита на четыре темы, где ошибаются даже уверенно говорящие: никогда в прошлом и будущем, каждый и весь, будущее время и предлоги. Уровень бэт+.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Одна буква решает">
+<meta property="og:description" content="Тренажёр иврита на четыре темы, где ошибаются даже уверенно говорящие: никогда в прошлом и будущем, каждый и весь, будущее время и предлоги. Уровень бэт+.">
+<meta property="og:image" content="og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#F6F4EE">
+<link rel="icon" type="image/png" sizes="32x32" href="icon-32.png">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Geologica:wght@400;500;600;700&family=Unbounded:wght@500;700&display=swap">
+<style>
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:#F6F4EE;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box}
+a{color:inherit}
+a:hover{opacity:.75}
+button:focus-visible,a:focus-visible{outline:3px solid #2B4BFF;outline-offset:2px}
+@keyframes mkSweep{from{background-size:0% 100%;color:var(--ink)}to{background-size:100% 100%;color:var(--onmarker)}}
+@keyframes pop{from{opacity:0;transform:scale(.5)}to{opacity:1;transform:scale(1)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes sheetUp{from{transform:translateY(100%)}to{transform:none}}
+@keyframes toastIn{from{opacity:0;transform:translate(-50%,8px)}to{opacity:1;transform:translate(-50%,0)}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</helmet>
+<div style="{{ rootStyle }}">
+<div style="max-width:560px;margin:0 auto;padding:0 20px;min-height:100vh;display:flex;flex-direction:column">
+
+<sc-if value="{{ showTop }}" hint-placeholder-val="{{ true }}"><div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 0 8px;min-height:68px">
+<sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}"><span style="font-size:13px;font-weight:600">Иврит с Фриман</span></sc-if>
+<sc-if value="{{ notHome }}"><button type="button" onClick="{{ onBack }}" aria-label="{{ backLabel }}" style="width:42px;height:42px;flex:none;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--ink);display:flex;align-items:center;justify-content:center;font-family:inherit;font-size:16px;cursor:pointer;padding:0">{{ backIcon }}</button></sc-if>
+<sc-if value="{{ hasCounter }}"><span style="font-family:'Unbounded',sans-serif;font-size:15px;font-weight:700">{{ cntA }}<span style="color:var(--ink3)">/{{ cntB }}</span></span></sc-if>
+<div style="display:flex;gap:8px;align-items:center">
+<sc-if value="{{ hasRuleBtn }}"><button type="button" onClick="{{ toggleRule }}" style="height:42px;padding:0 16px;border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--ink);font-family:inherit;font-size:13.5px;font-weight:600;cursor:pointer">{{ ruleBtnLabel }}</button></sc-if>
+<button type="button" onClick="{{ openSettings }}" aria-label="Настройки" title="Настройки" style="width:42px;height:42px;flex:none;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--ink);display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M2.5 5.5h13M2.5 12.5h13"></path><circle cx="6.5" cy="5.5" r="2.1" fill="var(--card)"></circle><circle cx="11.5" cy="12.5" r="2.1" fill="var(--card)"></circle></svg></button>
+</div>
+</div>
+</sc-if>
+
+<div ref="{{ screenRef }}" style="flex:1;display:flex;flex-direction:column">
+
+<sc-if value="{{ isWelcome }}">
+<div style="min-height:100vh;display:flex;flex-direction:column;padding:16px 0 calc(20px + env(safe-area-inset-bottom))">
+<div style="display:flex;justify-content:space-between;align-items:center;min-height:42px"><span style="font-size:13px;font-weight:600">Иврит с Фриман</span><sc-if value="{{ wNotLast }}"><button type="button" onClick="{{ wSkip }}" style="border:0;background:none;color:var(--ink2);font-family:inherit;font-size:14.5px;font-weight:500;cursor:pointer;padding:8px 0">Пропустить</button></sc-if></div>
+<div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:28px;padding:24px 0">
+<sc-if value="{{ w1 }}"><div style="background:var(--card);border:1px solid var(--line);border-radius:28px;padding:30px 22px 24px;display:flex;flex-direction:column;align-items:center;gap:18px"><div dir="rtl" lang="he" style="font-family:'Fredoka',serif;font-size:66px;line-height:1.1;font-weight:700"><span style="background:var(--marker);color:var(--onmarker);border-radius:12px;padding:0 6px">מ</span>עולם</div><div style="display:flex;gap:6px;align-items:center"><span style="width:10px;height:10px;border-radius:5px;background:var(--ok)"></span><span style="width:10px;height:10px;border-radius:5px;background:var(--ok)"></span><span style="width:10px;height:10px;border-radius:5px;background:var(--bad)"></span><span style="width:10px;height:10px;border-radius:5px;background:var(--ok)"></span><span style="width:26px;height:10px;border-radius:5px;background:var(--ink)"></span></div><span style="font-size:13px;color:var(--ink2)">5 вопросов · около 2 минут</span></div></sc-if>
+<sc-if value="{{ w2 }}"><div style="background:var(--card);border:1px solid var(--line);border-radius:28px;padding:24px 20px 20px;display:flex;flex-direction:column;gap:14px"><p dir="rtl" lang="he" style="margin:0;font-family:'Fredoka',serif;font-size:28px;line-height:1.6;text-align:right">אל תדאג, <span style="font-weight:700;white-space:nowrap;background:var(--marker);color:var(--onmarker);border-radius:6px;padding:0 4px">לעולם לא</span> אגלה את הסוד שלך.</p><div dir="rtl" style="height:50px;border-radius:26px;border:1.5px solid var(--ok);background:var(--okbg);color:var(--okfg);display:flex;align-items:center;justify-content:space-between;padding:0 18px;font-family:'Fredoka',serif;font-size:21px"><span lang="he">לעולם לא</span><span style="font-family:'Geologica',sans-serif;font-size:15px;font-weight:700">✓</span></div><div style="padding-top:12px;border-top:1px dashed var(--dim);display:flex;flex-direction:column;gap:4px"><span style="font-family:'Unbounded',sans-serif;font-size:14px;font-weight:700;color:var(--ok)">Верно</span><span style="font-size:14.5px;color:var(--ink2)"><span dir="rtl" lang="he" style="font-family:'Fredoka',serif;font-size:17px;color:var(--ink)">אגלה</span> в будущем.</span></div></div></sc-if>
+<sc-if value="{{ w3 }}"><div style="background:var(--marker);color:var(--onmarker);border-radius:28px;padding:22px;display:flex;flex-direction:column;gap:8px"><span style="font-size:13px;font-weight:600">Результат блока</span><div style="display:flex;align-items:baseline;gap:8px"><span style="font-family:'Unbounded',sans-serif;font-size:72px;line-height:.95;font-weight:700;letter-spacing:-.04em">11</span><span style="font-family:'Unbounded',sans-serif;font-size:20px;font-weight:500">/13</span></div><div style="display:flex;gap:4px"><span style="flex:1;height:6px;border-radius:3px;background:var(--onmarker)"></span><span style="flex:1;height:6px;border-radius:3px;background:var(--onmarker)"></span><span style="flex:1;height:6px;border-radius:3px;background:rgba(27,27,31,.16)"></span><span style="flex:1;height:6px;border-radius:3px;background:var(--onmarker)"></span><span style="flex:1;height:6px;border-radius:3px;background:var(--onmarker)"></span><span style="flex:1;height:6px;border-radius:3px;background:var(--onmarker)"></span><span style="flex:1;height:6px;border-radius:3px;background:rgba(27,27,31,.16)"></span><span style="flex:1;height:6px;border-radius:3px;background:var(--onmarker)"></span><span style="flex:1;height:6px;border-radius:3px;background:var(--onmarker)"></span><span style="flex:1;height:6px;border-radius:3px;background:var(--onmarker)"></span><span style="flex:1;height:6px;border-radius:3px;background:var(--onmarker)"></span><span style="flex:1;height:6px;border-radius:3px;background:var(--onmarker)"></span><span style="flex:1;height:6px;border-radius:3px;background:var(--onmarker)"></span></div><span style="margin-top:6px;align-self:flex-start;font-size:13.5px;font-weight:600;border:1.5px solid var(--onmarker);border-radius:999px;padding:5px 12px">Повторить ошибки</span></div></sc-if>
+<div style="display:flex;flex-direction:column;gap:10px">
+<span style="font-size:13px;font-weight:600;color:var(--ink3)">{{ wStepText }}</span>
+<sc-if value="{{ w1 }}"><h1 style="margin:0;font-family:'Unbounded',sans-serif;font-size:28px;line-height:1.15;font-weight:700">Сначала диагностика</h1><p style="margin:0;font-size:16px;line-height:1.55;color:var(--ink2);text-wrap:pretty">Пять вопросов без подсказок. Они покажут, какая из четырёх тем у тебя слабое место.</p></sc-if>
+<sc-if value="{{ w2 }}"><h1 style="margin:0;font-family:'Unbounded',sans-serif;font-size:28px;line-height:1.15;font-weight:700">Правило и задания</h1><p style="margin:0;font-size:16px;line-height:1.55;color:var(--ink2);text-wrap:pretty">В каждом блоке короткое правило с примерами и задания. Фразу можно послушать сразу, а после ответа видны перевод и разбор.</p></sc-if>
+<sc-if value="{{ w3 }}"><h1 style="margin:0;font-family:'Unbounded',sans-serif;font-size:28px;line-height:1.15;font-weight:700">Повтор и итог</h1><p style="margin:0;font-size:16px;line-height:1.55;color:var(--ink2);text-wrap:pretty">{{ w3Text }}</p></sc-if>
+</div>
+</div>
+<div style="display:flex;gap:6px;justify-content:center;margin-bottom:18px"><sc-for list="{{ wDots }}" as="d"><sc-if value="{{ d.on }}"><span style="width:22px;height:8px;border-radius:4px;background:var(--ink)"></span></sc-if><sc-if value="{{ d.off }}"><span style="width:8px;height:8px;border-radius:4px;background:var(--dim)"></span></sc-if></sc-for></div>
+<button type="button" onClick="{{ wNext }}" style="position:relative;overflow:hidden;isolation:isolate;box-shadow:0 4px 0 var(--btnsh);height:58px;width:100%;border:0;border-radius:999px;background:var(--btn);color:var(--btnfg);display:flex;align-items:center;justify-content:space-between;padding:0 8px 0 24px;font-family:inherit;font-size:17px;font-weight:600;cursor:pointer;transition:transform .08s,box-shadow .08s" style-active="transform:translateY(3px);box-shadow:0 1px 0 var(--btnsh)"><span data-lbl="1" style="position:relative;z-index:1">{{ wLabel }}</span><span style="position:relative;width:42px;height:42px;flex:none;display:flex;align-items:center;justify-content:center"><span data-dot="1" style="position:absolute;inset:0;border-radius:50%;background:var(--marker)"></span><span style="position:relative;color:var(--onmarker);font-size:18px">→</span></span></button>
+</div>
+</sc-if>
+
+<sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-direction:column;padding-top:12px">
+<span style="align-self:center;font-size:12px;font-weight:600;border:1px solid var(--ink);border-radius:999px;padding:3px 10px">Тренажёр и шпаргалка · уровень бэт+</span>
+<h1 style="margin:24px 0 0;font-family:'Unbounded',sans-serif;font-size:clamp(36px,10.5vw,54px);line-height:1.08;font-weight:700;letter-spacing:-.02em;text-align:center">Одна<br><span style="background-image:linear-gradient(var(--marker),var(--marker));background-repeat:no-repeat;background-position:left center;background-size:100% 100%;color:var(--onmarker);border-radius:.16em;padding:0 .1em;animation:mkSweep .6s cubic-bezier(.2,.8,.2,1) both;animation-delay:.15s">буква</span><br>решает</h1>
+<p style="margin:16px auto 0;max-width:30em;font-size:16px;line-height:1.55;color:var(--ink2);text-align:center;text-wrap:pretty">Четыре темы, на которых ошибаются даже уверенно говорящие: «никогда» в прошлом и будущем, «каждый» и «весь», будущее время с <span dir="rtl" lang="he" style="font-family:'Fredoka',serif;font-size:1.08em;color:var(--ink)">יהיה</span> и предлоги после слов вроде <span dir="rtl" lang="he" style="font-family:'Fredoka',serif;font-size:1.08em;color:var(--ink)">זקוק</span> и <span dir="rtl" lang="he" style="font-family:'Fredoka',serif;font-size:1.08em;color:var(--ink)">מעוניין</span>. Пройди диагностику, найди слабое место и разбери его на заданиях с переводом и объяснением.</p>
+<button type="button" onClick="{{ showWelcome }}" style="margin-top:18px;align-self:center;height:44px;padding:0 18px 0 20px;border-radius:999px;border:1.5px solid var(--ink);background:var(--card);color:var(--ink);display:flex;align-items:center;gap:10px;font-family:inherit;font-size:14.5px;font-weight:600;cursor:pointer;box-shadow:0 3px 0 var(--ink);transition:transform .08s,box-shadow .08s" style-active="transform:translateY(2px);box-shadow:0 1px 0 var(--ink)"><span>Как устроен тренажёр</span><span style="color:var(--ink3)">→</span></button>
+<div style="margin-top:22px;background:var(--card);border:1px solid var(--line);border-radius:22px;display:grid;grid-template-columns:1fr 1fr;overflow:hidden">
+<div style="padding:14px 10px;border-right:1px solid var(--line2);border-bottom:1px solid var(--line2);display:flex;flex-direction:column;gap:4px;align-items:center"><span dir="rtl" lang="he" style="font-family:'Fredoka',serif;font-size:21px;font-weight:500;white-space:nowrap"><span style="background-image:linear-gradient(var(--marker),var(--marker));background-repeat:no-repeat;background-position:right center;background-size:100% 100%;color:var(--onmarker);border-radius:3px;animation:mkSweep .55s cubic-bezier(.2,.8,.2,1) both;animation-delay:0.45s">מ</span>עולם · <span style="background-image:linear-gradient(var(--marker),var(--marker));background-repeat:no-repeat;background-position:right center;background-size:100% 100%;color:var(--onmarker);border-radius:3px;animation:mkSweep .55s cubic-bezier(.2,.8,.2,1) both;animation-delay:0.61s">ל</span>עולם</span><span style="font-size:12px;color:var(--ink2);text-align:center">никогда: прошлое или будущее</span></div>
+<div style="padding:14px 10px;border-bottom:1px solid var(--line2);display:flex;flex-direction:column;gap:4px;align-items:center"><span dir="rtl" lang="he" style="font-family:'Fredoka',serif;font-size:21px;font-weight:500;white-space:nowrap">כל יום · כל <span style="background-image:linear-gradient(var(--marker),var(--marker));background-repeat:no-repeat;background-position:right center;background-size:100% 100%;color:var(--onmarker);border-radius:3px;animation:mkSweep .55s cubic-bezier(.2,.8,.2,1) both;animation-delay:0.77s">ה</span>יום</span><span style="font-size:12px;color:var(--ink2);text-align:center">каждый или весь</span></div>
+<div style="padding:14px 10px;border-right:1px solid var(--line2);display:flex;flex-direction:column;gap:4px;align-items:center"><span dir="rtl" lang="he" style="font-family:'Fredoka',serif;font-size:21px;font-weight:500;white-space:nowrap">יהי<span style="background-image:linear-gradient(var(--marker),var(--marker));background-repeat:no-repeat;background-position:right center;background-size:100% 100%;color:var(--onmarker);border-radius:3px;animation:mkSweep .55s cubic-bezier(.2,.8,.2,1) both;animation-delay:0.93s">ה</span> · יהי<span style="background-image:linear-gradient(var(--marker),var(--marker));background-repeat:no-repeat;background-position:right center;background-size:100% 100%;color:var(--onmarker);border-radius:3px;animation:mkSweep .55s cubic-bezier(.2,.8,.2,1) both;animation-delay:1.09s">ו</span></span><span style="font-size:12px;color:var(--ink2);text-align:center">что будет: согласование</span></div>
+<div style="padding:14px 10px;display:flex;flex-direction:column;gap:4px;align-items:center"><span dir="rtl" lang="he" style="font-family:'Fredoka',serif;font-size:21px;font-weight:500;white-space:nowrap">זקוק <span style="background-image:linear-gradient(var(--marker),var(--marker));background-repeat:no-repeat;background-position:right center;background-size:100% 100%;color:var(--onmarker);border-radius:3px;animation:mkSweep .55s cubic-bezier(.2,.8,.2,1) both;animation-delay:1.25s">ל</span> · מעוניין <span style="background-image:linear-gradient(var(--marker),var(--marker));background-repeat:no-repeat;background-position:right center;background-size:100% 100%;color:var(--onmarker);border-radius:3px;animation:mkSweep .55s cubic-bezier(.2,.8,.2,1) both;animation-delay:1.41s">ב</span></span><span style="font-size:12px;color:var(--ink2);text-align:center">какой предлог после слова</span></div>
+</div>
+<sc-if value="{{ noDiag }}" hint-placeholder-val="{{ true }}">
+<button type="button" onClick="{{ startDiag }}" style="position:relative;overflow:hidden;isolation:isolate;box-shadow:0 4px 0 var(--btnsh);margin-top:22px;height:58px;width:100%;border:0;border-radius:999px;background:var(--btn);color:var(--btnfg);display:flex;align-items:center;justify-content:space-between;padding:0 8px 0 24px;font-family:inherit;font-size:17px;font-weight:600;cursor:pointer;transition:transform .1s;transition:transform .08s,box-shadow .08s" style-active="transform:translateY(3px);box-shadow:0 1px 0 var(--btnsh)"><span data-lbl="1" style="position:relative;z-index:1">Пройти диагностику</span><span style="position:relative;width:42px;height:42px;flex:none;display:flex;align-items:center;justify-content:center"><span data-dot="1" style="position:absolute;inset:0;border-radius:50%;background:var(--marker)"></span><span style="position:relative;color:var(--onmarker);font-size:18px">→</span></span></button>
+<p style="margin:10px 0 0;font-size:13.5px;color:var(--ink2);text-align:center">5 вопросов, около 2 минут. Покажет, с какого блока начать.</p>
+</sc-if>
+<sc-if value="{{ hasDiag }}">
+<div style="margin-top:22px;background:var(--card);border:1px solid var(--line);border-radius:22px;padding:16px 18px;display:flex;flex-direction:column;gap:10px">
+<div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px"><span style="font-size:13px;font-weight:600;color:var(--ink2)">Твой прогресс</span><span style="font-size:13px;font-weight:600">{{ progDone }}</span></div>
+<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px"><sc-for list="{{ progSegs }}" as="g" hint-placeholder-count="4"><div style="display:flex;flex-direction:column;gap:6px"><div style="height:8px;border-radius:4px;background:var(--soft);overflow:hidden"><div style="{{ g.fill }}"></div></div><span style="font-family:'Unbounded',sans-serif;font-size:11px;font-weight:500;color:var(--ink3)">{{ g.num }}</span></div></sc-for></div>
+<span style="font-size:13.5px;color:var(--ink2)">{{ progPoints }}</span>
+</div>
+<sc-if value="{{ hasResume }}"><button type="button" onClick="{{ resumeBlock }}" style="position:relative;overflow:hidden;isolation:isolate;box-shadow:0 4px 0 var(--btnsh);margin-top:12px;min-height:64px;width:100%;border:0;border-radius:999px;background:var(--btn);color:var(--btnfg);display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 8px 8px 24px;font-family:inherit;text-align:left;cursor:pointer;transition:transform .08s,box-shadow .08s" style-active="transform:translateY(3px);box-shadow:0 1px 0 var(--btnsh)"><span data-lbl="1" style="position:relative;z-index:1;display:flex;flex-direction:column;gap:1px;min-width:0"><span style="font-size:16.5px;font-weight:600">{{ resumeLabel }}</span><span style="font-size:12.5px;opacity:.7">{{ resumeSub }}</span></span><span style="position:relative;width:42px;height:42px;flex:none;display:flex;align-items:center;justify-content:center"><span data-dot="1" style="position:absolute;inset:0;border-radius:50%;background:var(--marker)"></span><span style="position:relative;color:var(--onmarker);font-size:18px">→</span></span></button></sc-if>
+<sc-if value="{{ hasNextCta }}"><button type="button" onClick="{{ nextGo }}" style="position:relative;overflow:hidden;isolation:isolate;box-shadow:0 4px 0 var(--btnsh);margin-top:12px;min-height:58px;width:100%;border:0;border-radius:999px;background:var(--btn);color:var(--btnfg);display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 8px 8px 24px;font-family:inherit;font-size:16.5px;font-weight:600;text-align:left;cursor:pointer;transition:transform .08s,box-shadow .08s" style-active="transform:translateY(3px);box-shadow:0 1px 0 var(--btnsh)"><span data-lbl="1" style="position:relative;z-index:1;min-width:0">{{ nextLabel }}</span><span style="position:relative;width:42px;height:42px;flex:none;display:flex;align-items:center;justify-content:center"><span data-dot="1" style="position:absolute;inset:0;border-radius:50%;background:var(--marker)"></span><span style="position:relative;color:var(--onmarker);font-size:18px">→</span></span></button></sc-if>
+<button type="button" onClick="{{ startDiag }}" style="margin-top:10px;align-self:center;border:0;background:none;color:var(--ink2);font-family:inherit;font-size:13.5px;cursor:pointer;padding:8px;text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--dim)">Пройти диагностику заново · было {{ diagCorrect }} из 5</button>
+</sc-if>
+<div style="margin-top:34px;display:flex;justify-content:space-between;align-items:baseline"><h2 style="margin:0;font-family:'Unbounded',sans-serif;font-size:17px;font-weight:700">Четыре блока</h2><span style="font-size:13px;color:var(--ink2)">{{ totalCount }}</span></div>
+<div style="margin-top:12px;display:flex;flex-direction:column;gap:10px">
+<sc-for list="{{ blocks }}" as="b" hint-placeholder-count="4">
+<button type="button" onClick="{{ b.onOpen }}" style="width:100%;text-align:left;font-family:inherit;color:var(--ink);cursor:pointer;background:var(--card);border:1px solid var(--line);border-radius:22px;padding:16px 18px;display:flex;flex-direction:column;gap:4px;transition:transform .12s" style-active="transform:scale(.985)">
+<div style="width:100%;display:flex;justify-content:space-between;align-items:center;gap:10px"><span style="font-family:'Unbounded',sans-serif;font-size:12px;font-weight:500;color:var(--ink3)">{{ b.num }}</span><span dir="rtl" lang="he" style="font-family:'Fredoka',serif;font-size:26px;font-weight:700;line-height:1.2">{{ b.heb }}</span></div>
+<span style="font-size:17px;font-weight:600">{{ b.title }}</span>
+<span style="font-size:14.5px;color:var(--ink2);line-height:1.45">{{ b.teaser }}</span>
+<div style="margin-top:8px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:13px;color:var(--ink2)">
+<sc-if value="{{ b.weak }}"><span style="background:var(--marker);color:var(--onmarker);font-weight:600;font-size:12px;padding:2px 9px;border-radius:999px">слабое место</span></sc-if>
+<sc-if value="{{ b.locked }}"><span style="background:var(--ink);color:var(--paper);font-weight:600;font-size:12px;padding:2px 9px;border-radius:999px">полная версия</span></sc-if>
+<span>{{ b.meta }}</span>
+</div>
+</button>
+</sc-for>
+</div>
+<h2 style="margin:30px 0 12px;font-family:'Unbounded',sans-serif;font-size:17px;font-weight:700">Итоговый тест</h2>
+<button type="button" onClick="{{ startFinal }}" style="width:100%;text-align:left;font-family:inherit;color:var(--ink);cursor:pointer;background:var(--card);border:1px solid var(--line);border-radius:22px;padding:16px 18px;display:flex;flex-direction:column;gap:4px" style-active="transform:scale(.985)">
+<span style="font-size:17px;font-weight:600">20 вопросов из всех блоков вперемешку</span>
+<span style="font-size:14.5px;color:var(--ink2);line-height:1.45">Без правил на экране. Результат сравнивается с диагностикой.</span>
+<div style="margin-top:8px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:13px;color:var(--ink2)">
+<sc-if value="{{ finalLockTag }}"><span style="background:var(--ink);color:var(--paper);font-weight:600;font-size:12px;padding:2px 9px;border-radius:999px">полная версия</span></sc-if>
+<sc-if value="{{ finalClosedTag }}"><span style="background:var(--soft);color:var(--ink);font-weight:600;font-size:12px;padding:2px 9px;border-radius:999px">закрыт</span></sc-if>
+<span>{{ finalMeta }}</span>
+</div>
+</button>
+</div>
+</sc-if>
+
+<sc-if value="{{ isIntro }}">
+<div style="display:flex;flex-direction:column;padding-top:8px">
+<span style="font-size:13px;font-weight:600;color:var(--ink3)">{{ introNum }}</span>
+<h1 style="margin:8px 0 0;font-family:'Unbounded',sans-serif;font-size:28px;line-height:1.15;font-weight:700;letter-spacing:-.01em">{{ introTitle }}</h1>
+<div dir="rtl" lang="he" style="margin-top:8px;font-family:'Fredoka',serif;font-size:44px;line-height:1.2;font-weight:700;text-align:right">{{ introHeb }}</div>
+<div style="margin-top:16px;display:flex;flex-direction:column;gap:12px">
+<p style="margin:0;font-size:16.5px;line-height:1.55;text-wrap:pretty">{{ rLead }}</p>
+<sc-if value="{{ rHasTr }}"><p style="margin:-4px 0 0;font-size:14px;line-height:1.5;color:var(--ink2)">{{ rTr }}</p></sc-if>
+<sc-for list="{{ rPairs }}" as="p" hint-placeholder-count="2">
+<div style="background:var(--card);border:1px solid var(--line);border-radius:22px;padding:14px 16px 16px;display:flex;flex-direction:column;gap:6px">
+<div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><span style="font-size:12.5px;font-weight:600;background:var(--soft);border-radius:999px;padding:3px 10px">{{ p.label }}</span><sc-if value="{{ p.voice }}"><button type="button" onClick="{{ p.onVoice }}" aria-label="Послушать" style="width:34px;height:34px;flex:none;border-radius:50%;border:1px solid var(--line);background:var(--paper);color:var(--ink);display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0"><svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 1.5v9l7.5-4.5z" fill="currentColor"></path></svg></button></sc-if></div>
+<div dir="rtl" lang="he" style="font-family:'Fredoka',serif;font-size:26px;line-height:1.4;text-align:right">{{ p.he }}</div>
+<div style="font-size:14px;color:var(--ink2);line-height:1.45">{{ p.ru }}</div>
+</div>
+</sc-for>
+<sc-if value="{{ rHasTable }}">
+<div style="background:var(--card);border:1px solid var(--line);border-radius:22px;padding:14px 16px 8px">
+<div style="font-size:13px;font-weight:600;color:var(--ink2);margin-bottom:6px">{{ rTableTitle }}</div>
+<sc-if value="{{ rTwo }}"><sc-for list="{{ rRows }}" as="row"><div dir="rtl" style="display:grid;grid-template-columns:72px 1fr auto;gap:10px;align-items:baseline;padding:8px 0;border-top:1px solid var(--line2)"><span style="font-size:18px;color:var(--ink2)">{{ row.c0 }}</span><span style="font-size:20px;font-weight:700">{{ row.c1 }}</span><span dir="ltr" style="font-size:13.5px;color:var(--ink2)">{{ row.c2 }}</span></div></sc-for></sc-if>
+<sc-if value="{{ rWide }}"><sc-for list="{{ rRows }}" as="row"><div style="padding:10px 0;border-top:1px solid var(--line2);display:flex;flex-direction:column;gap:4px"><div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px"><span style="font-size:14.5px;font-weight:600;line-height:1.35">{{ row.c1 }}</span><span style="font-size:19px;font-weight:700;text-align:right;flex:none">{{ row.c0 }}</span></div><span style="font-size:13.5px;color:var(--ink2);line-height:1.5">{{ row.c2 }}</span><sc-if value="{{ row.hasEx }}"><div style="display:flex;flex-direction:column;gap:6px;margin-top:4px"><sc-for list="{{ row.ex }}" as="x"><button type="button" onClick="{{ x.onVoice }}" aria-label="Послушать" style="width:100%;min-height:44px;padding:5px 14px 5px 6px;border-radius:999px;border:1px solid var(--line);background:var(--paper);color:var(--ink);display:flex;align-items:center;gap:10px;cursor:pointer;font-family:inherit;text-align:left"><sc-if value="{{ x.voice }}"><span style="width:32px;height:32px;flex:none;border-radius:50%;background:var(--card);border:1px solid var(--line);display:flex;align-items:center;justify-content:center"><svg width="10" height="10" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 1.5v9l7.5-4.5z" fill="currentColor"></path></svg></span></sc-if><span style="flex:1;min-width:0;font-size:13.5px;color:var(--ink2);line-height:1.35">{{ x.ru }}</span><span dir="rtl" lang="he" style="font-family:'Fredoka',serif;font-size:19px;flex:none">{{ x.he }}</span></button></sc-for></div></sc-if></div></sc-for></sc-if>
+</div>
+</sc-if>
+<sc-if value="{{ rHasNotes }}"><div style="display:flex;flex-direction:column;gap:10px;margin-top:4px"><sc-for list="{{ rNotes }}" as="n"><div style="display:flex;gap:10px;align-items:flex-start"><span style="flex:none;width:8px;height:8px;margin-top:8px;border-radius:2px;background:var(--marker)"></span><span style="font-size:14.5px;line-height:1.55;text-wrap:pretty">{{ n.t }}</span></div></sc-for></div></sc-if>
+</div>
+<sc-if value="{{ hasBlockReset }}"><div style="margin-top:28px;display:flex;flex-direction:column;align-items:center">
+<sc-if value="{{ notConfirmBlock }}"><button type="button" onClick="{{ askBlockReset }}" style="border:0;background:none;color:var(--ink2);font-family:inherit;font-size:13.5px;cursor:pointer;padding:8px;text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--dim)">Сбросить прогресс этого блока</button></sc-if>
+<sc-if value="{{ confirmBlock }}"><div style="width:100%;border:1.5px solid var(--bad);background:var(--badbg);border-radius:18px;padding:14px 16px;display:flex;flex-direction:column;gap:12px"><span style="font-size:14.5px;line-height:1.45">Удалятся результат блока и место, где ты остановился. Диагностика и другие блоки останутся.</span><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><button type="button" onClick="{{ doBlockReset }}" style="height:46px;border:0;border-radius:999px;background:var(--bad);color:#fff;font-family:inherit;font-size:15px;font-weight:600;cursor:pointer">Сбросить</button><button type="button" onClick="{{ cancelBlockReset }}" style="height:46px;border-radius:999px;border:1.5px solid var(--ink);background:var(--card);color:var(--ink);font-family:inherit;font-size:15px;font-weight:600;cursor:pointer">Отмена</button></div></div></sc-if>
+</div></sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{ isLock }}">
+<div style="padding-top:8px;display:flex;flex-direction:column;gap:6px">
+<span style="font-size:13px;font-weight:600;color:var(--ink3)">Полная версия</span>
+<div dir="rtl" lang="he" style="font-family:'Fredoka',serif;font-size:44px;line-height:1.2;font-weight:700;text-align:right">{{ lockHeb }}</div>
+<span style="font-size:18px;font-weight:600">{{ lockTitle }}</span>
+</div>
+</sc-if>
+<sc-if value="{{ isLockFinal }}">
+<div style="padding-top:8px;display:flex;flex-direction:column;gap:8px">
+<span style="font-size:13px;font-weight:600;color:var(--ink3)">Итоговый тест</span>
+<h1 style="margin:0;font-family:'Unbounded',sans-serif;font-size:28px;line-height:1.15;font-weight:700">Только в полной версии</h1>
+</div>
+</sc-if>
+<sc-if value="{{ isFinalWait }}">
+<div style="padding-top:8px;display:flex;flex-direction:column;gap:10px">
+<span style="font-size:13px;font-weight:600;color:var(--ink3)">Итоговый тест</span>
+<h1 style="margin:0;font-family:'Unbounded',sans-serif;font-size:28px;line-height:1.15;font-weight:700">Пока закрыт</h1>
+<p style="margin:0;font-size:16px;line-height:1.55;color:var(--ink2);text-wrap:pretty">{{ waitText }}</p>
+</div>
+</sc-if>
+
+<sc-if value="{{ isSession }}">
+<div style="display:flex;flex-direction:column;padding-top:2px">
+<div style="display:flex;flex-wrap:wrap;gap:5px;justify-content:center;align-items:center">
+<sc-for list="{{ dots }}" as="d" hint-placeholder-count="13"><span style="{{ d.st }}"></span></sc-for>
+</div>
+<sc-if value="{{ hasCaption }}"><p style="margin:14px 0 0;font-size:14px;color:var(--ink2);text-align:center">{{ caption }}</p></sc-if>
+<sc-if value="{{ ruleOpen }}">
+<div style="margin-top:14px;background:var(--soft);border-radius:24px;padding:16px;display:flex;flex-direction:column;gap:12px">
+<p style="margin:0;font-size:16px;line-height:1.55;text-wrap:pretty">{{ rLead }}</p>
+<sc-if value="{{ rHasTr }}"><p style="margin:-4px 0 0;font-size:14px;line-height:1.5;color:var(--ink2)">{{ rTr }}</p></sc-if>
+<sc-for list="{{ rPairs }}" as="p">
+<div style="background:var(--card);border:1px solid var(--line);border-radius:20px;padding:12px 14px 14px;display:flex;flex-direction:column;gap:4px">
+<span style="align-self:flex-start;font-size:12.5px;font-weight:600;background:var(--soft);border-radius:999px;padding:3px 10px">{{ p.label }}</span>
+<div dir="rtl" lang="he" style="font-family:'Fredoka',serif;font-size:23px;line-height:1.4;text-align:right">{{ p.he }}</div>
+<div style="font-size:13.5px;color:var(--ink2);line-height:1.45">{{ p.ru }}</div>
+</div>
+</sc-for>
+<sc-if value="{{ rHasTable }}">
+<div style="background:var(--card);border:1px solid var(--line);border-radius:20px;padding:12px 14px 6px">
+<div style="font-size:13px;font-weight:600;color:var(--ink2);margin-bottom:6px">{{ rTableTitle }}</div>
+<sc-if value="{{ rTwo }}"><sc-for list="{{ rRows }}" as="row"><div dir="rtl" style="display:grid;grid-template-columns:72px 1fr auto;gap:10px;align-items:baseline;padding:7px 0;border-top:1px solid var(--line2)"><span style="font-size:17px;color:var(--ink2)">{{ row.c0 }}</span><span style="font-size:19px;font-weight:700">{{ row.c1 }}</span><span dir="ltr" style="font-size:13px;color:var(--ink2)">{{ row.c2 }}</span></div></sc-for></sc-if>
+<sc-if value="{{ rWide }}"><sc-for list="{{ rRows }}" as="row"><div style="padding:9px 0;border-top:1px solid var(--line2);display:flex;flex-direction:column;gap:3px"><div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px"><span style="font-size:14px;font-weight:600;line-height:1.35">{{ row.c1 }}</span><span style="font-size:18px;font-weight:700;text-align:right;flex:none">{{ row.c0 }}</span></div><span style="font-size:13px;color:var(--ink2);line-height:1.5">{{ row.c2 }}</span><sc-if value="{{ row.hasEx }}"><div style="display:flex;flex-direction:column;gap:6px;margin-top:4px"><sc-for list="{{ row.ex }}" as="x"><button type="button" onClick="{{ x.onVoice }}" aria-label="Послушать" style="width:100%;min-height:44px;padding:5px 14px 5px 6px;border-radius:999px;border:1px solid var(--line);background:var(--paper);color:var(--ink);display:flex;align-items:center;gap:10px;cursor:pointer;font-family:inherit;text-align:left"><sc-if value="{{ x.voice }}"><span style="width:32px;height:32px;flex:none;border-radius:50%;background:var(--card);border:1px solid var(--line);display:flex;align-items:center;justify-content:center"><svg width="10" height="10" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 1.5v9l7.5-4.5z" fill="currentColor"></path></svg></span></sc-if><span style="flex:1;min-width:0;font-size:13.5px;color:var(--ink2);line-height:1.35">{{ x.ru }}</span><span dir="rtl" lang="he" style="font-family:'Fredoka',serif;font-size:18px;flex:none">{{ x.he }}</span></button></sc-for></div></sc-if></div></sc-for></sc-if>
+</div>
+</sc-if>
+<sc-if value="{{ rHasNotes }}"><div style="display:flex;flex-direction:column;gap:8px"><sc-for list="{{ rNotes }}" as="n"><div style="display:flex;gap:10px;align-items:flex-start"><span style="flex:none;width:8px;height:8px;margin-top:8px;border-radius:2px;background:var(--marker)"></span><span style="font-size:14px;line-height:1.55;text-wrap:pretty">{{ n.t }}</span></div></sc-for></div></sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{ isChoice }}">
+<div style="margin-top:22px;background:var(--card);border:1px solid var(--line);border-radius:28px;padding:24px 20px 20px">
+<sc-if value="{{ showVoiceQ }}"><div style="display:flex;margin:-8px 0 8px"><button type="button" onClick="{{ voiceQ }}" aria-label="Послушать фразу" style="height:34px;padding:0 12px 0 10px;border-radius:999px;border:1px solid var(--line);background:var(--paper);color:var(--ink);display:flex;align-items:center;gap:6px;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer"><svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 1.5v9l7.5-4.5z" fill="currentColor"></path></svg><span>Послушать</span></button></div></sc-if>
+<sc-if value="{{ hasQ }}"><p dir="rtl" lang="he" style="margin:0;font-family:'Fredoka',serif;font-size:clamp(25px,7vw,30px);line-height:1.62;text-align:right">{{ qPre }}{{ gapNode }}{{ qPost }}</p></sc-if>
+<sc-if value="{{ hasPrompt }}"><p style="margin:0;font-size:19px;font-weight:600;line-height:1.4">{{ promptNode }}</p></sc-if>
+<div ref="{{ optsRef }}" style="margin-top:22px;display:flex;flex-direction:column;gap:10px">
+<sc-for list="{{ opts }}" as="o" hint-placeholder-count="2">
+<sc-if value="{{ o.idle }}"><button type="button" onClick="{{ o.onPick }}" dir="rtl" lang="he" style="min-height:60px;width:100%;padding:12px 22px;border-radius:30px;border:1.5px solid var(--ink);background:var(--card);color:var(--ink);font-family:'Fredoka',serif;font-size:23px;font-weight:500;line-height:1.35;display:flex;align-items:center;justify-content:center;text-align:center;cursor:pointer;transition:background-color .15s,transform .1s;box-shadow:0 3px 0 var(--ink);transition:transform .08s,box-shadow .08s,background-color .15s" style-active="transform:translateY(2px);box-shadow:0 1px 0 var(--ink)" style-hover="background:var(--soft)">{{ o.text }}</button></sc-if>
+<sc-if value="{{ o.correct }}"><div data-ok="1" dir="rtl" lang="he" style="min-height:60px;padding:12px 22px;border-radius:30px;border:1.5px solid var(--ok);background:var(--okbg);color:var(--okfg);font-family:'Fredoka',serif;font-size:23px;font-weight:500;line-height:1.35;display:flex;align-items:center;justify-content:space-between;gap:12px;text-align:right"><span>{{ o.text }}</span><span style="font-family:'Geologica',sans-serif;font-size:16px;font-weight:700">✓</span></div></sc-if>
+<sc-if value="{{ o.wrong }}"><div dir="rtl" lang="he" style="min-height:60px;padding:12px 22px;border-radius:30px;border:1.5px solid var(--bad);background:var(--badbg);color:var(--badfg);font-family:'Fredoka',serif;font-size:23px;font-weight:500;line-height:1.35;display:flex;align-items:center;justify-content:space-between;gap:12px;text-align:right"><span style="text-decoration:line-through;text-decoration-thickness:2px">{{ o.text }}</span><span style="font-family:'Geologica',sans-serif;font-size:16px;font-weight:700">✕</span></div></sc-if>
+<sc-if value="{{ o.dim }}"><div data-dim="1" dir="rtl" lang="he" style="opacity:.5;min-height:60px;padding:12px 22px;border-radius:30px;border:1.5px solid var(--line);color:var(--ink3);font-family:'Fredoka',serif;font-size:23px;font-weight:500;line-height:1.35;display:flex;align-items:center;justify-content:center;text-align:center">{{ o.text }}</div></sc-if>
+</sc-for>
+</div>
+<sc-if value="{{ ans }}">
+<div ref="{{ fbRef }}" style="margin-top:18px;padding-top:16px;border-top:1px dashed var(--dim);display:flex;flex-direction:column;gap:8px">
+<sc-if value="{{ ok }}"><div style="display:flex;align-items:center;justify-content:space-between;gap:10px"><div style="font-family:'Unbounded',sans-serif;font-size:15px;font-weight:700;color:var(--ok)">Верно</div><sc-if value="{{ hasStreak }}"><span style="display:inline-flex;align-items:center;gap:6px;background:var(--marker);color:var(--onmarker);border-radius:999px;padding:4px 12px;font-family:'Unbounded',sans-serif;font-size:12.5px;font-weight:700;animation:pop .6s cubic-bezier(.3,1.6,.5,1) both">{{ streakText }}</span></sc-if></div></sc-if>
+<sc-if value="{{ notOk }}"><div style="font-family:'Unbounded',sans-serif;font-size:15px;font-weight:700;color:var(--bad)">Неверно</div></sc-if>
+<sc-if value="{{ hasCorrectLine }}"><div style="font-size:14.5px;line-height:1.5">Правильно: <span dir="rtl" lang="he" style="font-family:'Fredoka',serif;font-size:20px;font-weight:700">{{ correctHe }}</span></div></sc-if>
+<sc-if value="{{ hasRu }}"><div style="font-size:15px;line-height:1.5;font-weight:500">{{ ruNode }}</div></sc-if>
+<div style="font-size:14.5px;line-height:1.55;color:var(--ink2);text-wrap:pretty">{{ whyNode }}</div>
+</div>
+</sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{ isBank }}">
+<div style="margin-top:22px;background:var(--card);border:1px solid var(--line);border-radius:28px;padding:22px 20px 20px">
+<p style="margin:0;font-size:17px;font-weight:600;line-height:1.4">{{ bankTitle }}</p>
+<p style="margin:6px 0 0;font-size:13.5px;color:var(--ink2);line-height:1.45">Слова внизу экрана. Нажми на слово, и оно встанет в отмеченный пропуск. Чтобы выбрать другой пропуск, нажми на него. Чтобы убрать слово, нажми на него в пропуске.</p>
+<div style="margin-top:12px;display:flex;flex-direction:column">
+<sc-for list="{{ lines }}" as="l" hint-placeholder-count="6">
+<div style="padding:10px 0;border-top:1px solid var(--line2)">
+<p dir="rtl" lang="he" style="margin:0;font-family:'Fredoka',serif;font-size:clamp(22px,6.2vw,27px);line-height:1.65;text-align:right">{{ l.pre }}<sc-if value="{{ l.gEmpty }}"><button type="button" onClick="{{ l.onGap }}" aria-label="Пропуск" style="display:inline-block;min-width:3.6em;height:1.25em;vertical-align:-.22em;border-radius:8px;border:1.5px dashed var(--ink3);background:var(--soft);cursor:pointer;padding:0;margin:0 .1em"></button></sc-if><sc-if value="{{ l.gSel }}"><button type="button" onClick="{{ l.onGap }}" data-gapsel="1" aria-label="Выбранный пропуск" style="display:inline-block;min-width:3.6em;height:1.25em;vertical-align:-.22em;border-radius:8px;border:2px solid var(--ink);background:var(--card);box-shadow:0 0 0 3px var(--marker);cursor:pointer;padding:0;margin:0 .1em"></button></sc-if><sc-if value="{{ l.gFilled }}"><button type="button" onClick="{{ l.onGap }}" style="display:inline;border:0;border-radius:.2em;padding:0 .2em;margin:0 .05em;font-family:inherit;font-size:inherit;font-weight:700;line-height:inherit;color:var(--onmarker);cursor:pointer;background-image:linear-gradient(var(--marker),var(--marker));background-repeat:no-repeat;background-position:right center;background-size:100% 100%;background-color:transparent;animation:mkSweep .45s cubic-bezier(.2,.8,.2,1) both">{{ l.text }}</button></sc-if><sc-if value="{{ l.gOk }}"><span style="font-weight:700;white-space:nowrap;background:var(--marker);color:var(--onmarker);border-radius:.2em;padding:0 .2em">{{ l.text }}</span></sc-if><sc-if value="{{ l.gNo }}"><span style="white-space:nowrap"><span style="color:var(--bad);text-decoration:line-through;text-decoration-thickness:2px">{{ l.noText }}</span> <span style="background:var(--okbg);color:var(--okfg);font-weight:700;border-radius:.2em;padding:0 .2em">{{ l.fix }}</span></span></sc-if>{{ l.post }}</p>
+<div style="margin-top:4px;display:flex;justify-content:space-between;align-items:center;gap:10px"><p style="margin:0;font-size:13.5px;color:var(--ink2)">на русском: {{ l.hint }}</p><sc-if value="{{ l.voice }}"><button type="button" onClick="{{ l.onVoice }}" aria-label="Послушать фразу" style="width:34px;height:34px;flex:none;border-radius:50%;border:1px solid var(--line);background:var(--paper);color:var(--ink);display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0"><svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 1.5v9l7.5-4.5z" fill="currentColor"></path></svg></button></sc-if></div>
+</div>
+</sc-for>
+</div>
+<sc-if value="{{ ans }}">
+<div ref="{{ fbRef }}" style="margin-top:18px;padding-top:16px;border-top:1px dashed var(--dim);display:flex;flex-direction:column;gap:8px">
+<sc-if value="{{ bankAllOk }}"><div style="font-family:'Unbounded',sans-serif;font-size:15px;font-weight:700;color:var(--ok)">Всё верно</div></sc-if>
+<sc-if value="{{ bankNotAll }}"><div style="font-family:'Unbounded',sans-serif;font-size:15px;font-weight:700;color:var(--bad)">{{ bankVerdict }}</div></sc-if>
+<div style="font-size:14.5px;line-height:1.55;color:var(--ink2);text-wrap:pretty">{{ whyNode }}</div>
+</div>
+</sc-if>
+</div>
+</sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{ isScore }}">
+<div style="position:relative;margin-top:8px;background:var(--marker);color:var(--onmarker);border-radius:28px;padding:22px 22px 20px;display:flex;flex-direction:column;gap:8px">
+<div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><span style="font-size:13px;font-weight:600">{{ scKicker }}</span><sc-if value="{{ hasScHeb }}"><span dir="rtl" lang="he" style="font-family:'Fredoka',serif;font-size:19px;font-weight:500">{{ scHeb }}</span></sc-if></div>
+<div style="display:flex;align-items:baseline;gap:8px"><span style="font-family:'Unbounded',sans-serif;font-size:84px;line-height:.95;font-weight:700;letter-spacing:-.04em;font-variant-numeric:tabular-nums">{{ shown }}</span><span style="font-family:'Unbounded',sans-serif;font-size:22px;font-weight:500">/{{ scMax }}</span></div>
+<span style="font-size:16px;font-weight:500;line-height:1.45">{{ scMsg }}</span>
+<sc-if value="{{ hasSegs }}"><div style="margin-top:6px;display:flex;gap:4px"><sc-for list="{{ segs }}" as="g"><sc-if value="{{ g.ok }}"><span style="flex:1;height:6px;border-radius:3px;background:var(--onmarker)"></span></sc-if><sc-if value="{{ g.part }}"><span style="flex:1;height:6px;border-radius:3px;background:rgba(27,27,31,.5)"></span></sc-if><sc-if value="{{ g.bad }}"><span style="flex:1;height:6px;border-radius:3px;background:rgba(27,27,31,.16)"></span></sc-if></sc-for></div></sc-if>
+<sc-if value="{{ celebrate }}">{{ confettiNode }}</sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{ isDiagRes }}">
+<div style="margin-top:12px;display:flex;flex-wrap:wrap;gap:8px">
+<sc-for list="{{ diagChips }}" as="c"><sc-if value="{{ c.ok }}"><span style="display:flex;align-items:center;gap:8px;padding:6px 12px;border-radius:999px;border:1.5px solid var(--ok);background:var(--okbg);color:var(--okfg);font-size:14px;font-weight:600"><span dir="rtl" lang="he" style="font-family:'Fredoka',serif;font-size:18px">{{ c.heb }}</span>✓</span></sc-if><sc-if value="{{ c.bad }}"><span style="display:flex;align-items:center;gap:8px;padding:6px 12px;border-radius:999px;border:1.5px solid var(--bad);background:var(--badbg);color:var(--badfg);font-size:14px;font-weight:600"><span dir="rtl" lang="he" style="font-family:'Fredoka',serif;font-size:18px">{{ c.heb }}</span>✕</span></sc-if></sc-for>
+</div>
+</sc-if>
+
+<sc-if value="{{ isFinalRes }}">
+<div style="margin-top:12px;background:var(--card);border:1px solid var(--line);border-radius:22px;padding:18px;display:flex;flex-direction:column;gap:14px">
+<sc-if value="{{ hasCmp }}">
+<div style="display:flex;flex-direction:column;gap:6px"><div style="display:flex;justify-content:space-between;font-size:14px"><span>Диагностика</span><span style="font-weight:700">{{ dPctText }}</span></div><div style="height:8px;border-radius:4px;background:var(--soft);overflow:hidden"><div style="{{ dBar }}"></div></div></div>
+<div style="display:flex;flex-direction:column;gap:6px"><div style="display:flex;justify-content:space-between;font-size:14px"><span>Итоговый тест</span><span style="font-weight:700">{{ fPctText }}</span></div><div style="height:8px;border-radius:4px;background:var(--soft);overflow:hidden"><div style="{{ fBar }}"></div></div></div>
+</sc-if>
+<sc-if value="{{ noCmp }}"><span style="font-size:14px;color:var(--ink2)">Диагностику ты не проходил, сравнить не с чем.</span></sc-if>
+<div style="display:flex;flex-wrap:wrap;gap:8px">
+<sc-for list="{{ fChips }}" as="c"><sc-if value="{{ c.ok }}"><span style="display:flex;align-items:center;gap:8px;padding:5px 12px;border-radius:999px;border:1.5px solid var(--ok);background:var(--okbg);color:var(--okfg);font-size:13.5px;font-weight:600"><span dir="rtl" lang="he" style="font-family:'Fredoka',serif;font-size:17px">{{ c.heb }}</span>{{ c.txt }}</span></sc-if><sc-if value="{{ c.bad }}"><span style="display:flex;align-items:center;gap:8px;padding:5px 12px;border-radius:999px;border:1.5px solid var(--bad);background:var(--badbg);color:var(--badfg);font-size:13.5px;font-weight:600"><span dir="rtl" lang="he" style="font-family:'Fredoka',serif;font-size:17px">{{ c.heb }}</span>{{ c.txt }}</span></sc-if></sc-for>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ hasMisses }}">
+<div style="margin-top:26px;display:flex;flex-direction:column;gap:10px">
+<h2 style="margin:0 0 2px;font-family:'Unbounded',sans-serif;font-size:17px;font-weight:700">Разбор ошибок</h2>
+<sc-for list="{{ misses }}" as="m">
+<div style="background:var(--card);border:1px solid var(--line);border-radius:22px;padding:16px 18px;display:flex;flex-direction:column;gap:6px">
+<sc-if value="{{ m.isChoice }}"><div dir="rtl" lang="he" style="font-family:'Fredoka',serif;font-size:23px;line-height:1.55;text-align:right">{{ m.he }}</div><sc-if value="{{ m.hasRu }}"><div style="font-size:14px;line-height:1.45;color:var(--ink2)">{{ m.ru }}</div></sc-if></sc-if>
+<sc-if value="{{ m.isBank }}"><sc-for list="{{ m.lines }}" as="ln"><div style="display:flex;flex-direction:column;gap:2px;padding-bottom:6px"><div dir="rtl" lang="he" style="font-family:'Fredoka',serif;font-size:22px;line-height:1.55;text-align:right">{{ ln.he }}</div><div style="font-size:13.5px;color:var(--ink2)">{{ ln.hint }}</div></div></sc-for></sc-if>
+<div style="font-size:14.5px;line-height:1.5;text-wrap:pretty">{{ m.why }}</div>
+</div>
+</sc-for>
+</div>
+</sc-if>
+
+<sc-if value="{{ showPaywall }}">
+<div style="margin-top:22px;background:var(--card);border:1px solid var(--line);border-radius:28px;padding:22px 20px;display:flex;flex-direction:column;gap:14px">
+<span style="align-self:flex-start;font-size:12px;font-weight:600;background:var(--ink);color:var(--paper);border-radius:999px;padding:3px 10px">Полная версия</span>
+<div style="font-family:'Unbounded',sans-serif;font-size:24px;line-height:1.2;font-weight:700">{{ pwTitle }}</div>
+<div style="height:10px;border-radius:5px;background:var(--soft);overflow:hidden"><div style="{{ pwBar }}"></div></div>
+<div style="font-size:14.5px;color:var(--ink2)">Остальное откроется в полной версии:</div>
+<div style="display:flex;flex-direction:column;border-top:1px solid var(--line2)">
+<div style="padding:12px 0;border-bottom:1px solid var(--line2);display:flex;gap:12px;align-items:flex-start"><span style="flex:none;width:22px;height:22px;border-radius:50%;background:var(--marker);color:var(--onmarker);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700">✓</span><div style="display:flex;flex-direction:column;gap:6px"><span style="font-size:15px;font-weight:600">Четыре блока с правилами</span><div style="display:flex;flex-wrap:wrap;gap:6px"><span dir="rtl" lang="he" style="font-family:'Fredoka',serif;font-size:17px;background:var(--soft);border-radius:999px;padding:1px 10px">מעולם / לעולם</span><span dir="rtl" lang="he" style="font-family:'Fredoka',serif;font-size:17px;background:var(--soft);border-radius:999px;padding:1px 10px">כל / כל ה</span><span dir="rtl" lang="he" style="font-family:'Fredoka',serif;font-size:17px;background:var(--soft);border-radius:999px;padding:1px 10px">יהיה לי</span><span dir="rtl" lang="he" style="font-family:'Fredoka',serif;font-size:17px;background:var(--soft);border-radius:999px;padding:1px 10px">עלול / עשוי</span></div></div></div>
+<div style="padding:12px 0;border-bottom:1px solid var(--line2);display:flex;gap:12px;align-items:center"><span style="flex:none;width:22px;height:22px;border-radius:50%;background:var(--marker);color:var(--onmarker);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700">✓</span><span style="font-size:15px;font-weight:600">{{ pwTotalLine }}</span></div>
+<div style="padding:12px 0;border-bottom:1px solid var(--line2);display:flex;gap:12px;align-items:center"><span style="flex:none;width:22px;height:22px;border-radius:50%;background:var(--marker);color:var(--onmarker);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700">✓</span><span style="font-size:15px;font-weight:600">Диагностика и итоговый тест</span></div>
+<div style="padding:12px 0;border-bottom:1px solid var(--line2);display:flex;gap:12px;align-items:center"><span style="flex:none;width:22px;height:22px;border-radius:50%;background:var(--marker);color:var(--onmarker);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700">✓</span><span style="font-size:15px;font-weight:600">PDF-шпаргалка на два листа</span></div>
+<div style="padding:12px 0;border-bottom:1px solid var(--line2);display:flex;gap:12px;align-items:center"><span style="flex:none;width:22px;height:22px;border-radius:50%;background:var(--marker);color:var(--onmarker);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700">✓</span><span style="font-size:15px;font-weight:600">Озвучка всех 83 фраз</span></div>
+</div>
+<div style="display:flex;align-items:baseline;gap:10px"><span style="font-family:'Unbounded',sans-serif;font-size:40px;line-height:1;font-weight:700">69 ₪</span></div>
+<a href="{{ payUrl }}" target="_blank" rel="noopener" style="position:relative;overflow:hidden;isolation:isolate;box-shadow:0 4px 0 var(--btnsh);height:58px;border-radius:999px;background:var(--btn);color:var(--btnfg);display:flex;align-items:center;justify-content:space-between;padding:0 8px 0 24px;font-size:17px;font-weight:600;text-decoration:none;transition:transform .08s,box-shadow .08s" style-active="transform:translateY(3px);box-shadow:0 1px 0 var(--btnsh)"><span data-lbl="1" style="position:relative;z-index:1">Купить полную версию</span><span style="position:relative;width:42px;height:42px;flex:none;display:flex;align-items:center;justify-content:center"><span data-dot="1" style="position:absolute;inset:0;border-radius:50%;background:var(--marker)"></span><span style="position:relative;color:var(--onmarker);font-size:18px">→</span></span></a>
+<a href="{{ tgUrl }}" target="_blank" rel="noopener" style="font-size:14px;color:var(--ink2);text-align:center">Есть вопрос? Напиши в Telegram</a>
+</div>
+</sc-if>
+
+<sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+<div style="margin-top:40px;padding:16px 0 28px;border-top:1px solid var(--line);font-size:13.5px;color:var(--ink2);display:flex;flex-wrap:wrap;gap:6px 14px"><span>Иврит с Фриман</span><a href="https://t.me/Freeman_hebrew" target="_blank" rel="noopener">Telegram-канал</a><a href="https://freemanhebrew.github.io/ivritwithfreeman/" target="_blank" rel="noopener">все проекты</a></div>
+</sc-if>
+
+<div style="flex:1;min-height:24px"></div>
+
+<sc-if value="{{ showBar }}">
+<div ref="{{ barRef }}" style="position:sticky;bottom:0;margin:0 -20px;padding:14px 20px calc(16px + env(safe-area-inset-bottom));background:linear-gradient(rgba(0,0,0,0),var(--paper) 32%);display:flex;flex-direction:column;gap:10px;z-index:5">
+<sc-if value="{{ trayOn }}"><div style="background:var(--card);border:1px solid var(--line);border-radius:24px;padding:12px;box-shadow:0 8px 28px rgba(0,0,0,.10)"><div dir="rtl" style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center"><sc-for list="{{ chips }}" as="c" hint-placeholder-count="8"><sc-if value="{{ c.free }}"><button type="button" onClick="{{ c.onTap }}" lang="he" style="font-family:'Fredoka',serif;font-size:21px;font-weight:500;padding:5px 15px;border-radius:999px;border:1.5px solid var(--ink);background:var(--card);color:var(--ink);cursor:pointer;box-shadow:0 3px 0 var(--ink);transition:transform .08s,box-shadow .08s,background-color .15s" style-active="transform:translateY(2px);box-shadow:0 1px 0 var(--ink)">{{ c.text }}</button></sc-if><sc-if value="{{ c.used }}"><span lang="he" style="font-family:'Fredoka',serif;font-size:21px;font-weight:500;padding:5px 15px;border-radius:999px;border:1.5px dashed var(--dim);color:var(--ink3)">{{ c.text }}</span></sc-if></sc-for></div></div></sc-if>
+<div style="display:flex;gap:8px">
+<sc-if value="{{ hasPrev }}"><button type="button" onClick="{{ onPrev }}" aria-label="Предыдущее задание" title="Предыдущее задание" style="width:58px;height:58px;flex:none;border-radius:50%;border:1.5px solid var(--ink);background:var(--card);color:var(--ink);font-family:inherit;font-size:19px;cursor:pointer;padding:0;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 0 var(--ink);transition:transform .08s,box-shadow .08s" style-active="transform:translateY(2px);box-shadow:0 1px 0 var(--ink)">←</button></sc-if>
+<sc-if value="{{ barOn }}"><button type="button" onClick="{{ onBar }}" style="position:relative;overflow:hidden;isolation:isolate;box-shadow:0 4px 0 var(--btnsh);flex:1.4;min-width:0;height:58px;border:0;border-radius:999px;background:var(--btn);color:var(--btnfg);display:flex;align-items:center;justify-content:space-between;gap:8px;padding:0 8px 0 22px;font-family:inherit;font-size:16.5px;font-weight:600;cursor:pointer;transition:transform .1s;transition:transform .08s,box-shadow .08s" style-active="transform:translateY(3px);box-shadow:0 1px 0 var(--btnsh)"><span data-lbl="1" style="position:relative;z-index:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ barLabel }}</span><span style="position:relative;width:42px;height:42px;flex:none;display:flex;align-items:center;justify-content:center"><span data-dot="1" style="position:absolute;inset:0;border-radius:50%;background:var(--marker)"></span><span style="position:relative;color:var(--onmarker);font-size:18px">→</span></span></button></sc-if>
+<sc-if value="{{ barOff }}"><div style="flex:1.4;height:58px;border-radius:999px;background:var(--soft);color:var(--ink3);display:flex;align-items:center;padding:0 22px;font-size:16.5px;font-weight:600">{{ barLabel }}</div></sc-if>
+<sc-if value="{{ bar2 }}"><button type="button" onClick="{{ onBar2 }}" style="flex:1;min-width:0;height:58px;border-radius:999px;border:1.5px solid var(--ink);background:var(--card);color:var(--ink);font-family:inherit;font-size:15.5px;font-weight:600;cursor:pointer;white-space:nowrap;box-shadow:0 3px 0 var(--ink);transition:transform .08s,box-shadow .08s,background-color .15s" style-active="transform:translateY(2px);box-shadow:0 1px 0 var(--ink)">{{ bar2Label }}</button></sc-if>
+</div>
+</div>
+</sc-if>
+</div>
+</div>
+<sc-if value="{{ hasToast }}"><div role="status" style="position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom));transform:translateX(-50%);background:var(--btn);color:var(--btnfg);border-radius:999px;padding:10px 18px;font-size:14px;font-weight:500;white-space:nowrap;z-index:20;animation:toastIn .45s cubic-bezier(.3,1.5,.5,1)">{{ toast }}</div></sc-if>
+<sc-if value="{{ showSettings }}">
+<div onClick="{{ closeSettings }}" style="position:fixed;inset:0;background:rgba(10,10,12,.45);z-index:30;animation:fadeIn .2s ease-out"></div>
+<div role="dialog" aria-label="Настройки" style="position:fixed;left:0;right:0;bottom:0;z-index:31;display:flex;justify-content:center;bottom:-28px;animation:sheetUp .55s cubic-bezier(.22,1.35,.45,1)">
+<div style="width:100%;max-width:560px;max-height:calc(100vh - 12px);overflow-y:auto;background:var(--card);color:var(--ink);border-radius:28px 28px 0 0;padding:10px 20px calc(52px + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:20px">
+<span style="align-self:center;width:40px;height:4px;border-radius:2px;background:var(--dim)"></span>
+<div style="display:flex;justify-content:space-between;align-items:center"><span style="font-family:'Unbounded',sans-serif;font-size:18px;font-weight:700">Настройки</span><button type="button" onClick="{{ closeSettings }}" aria-label="Закрыть" style="width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:var(--paper);color:var(--ink);font-family:inherit;font-size:14px;cursor:pointer;padding:0">✕</button></div>
+<div style="display:flex;flex-direction:column;gap:8px"><span style="font-size:13px;font-weight:600;color:var(--ink2)">Оформление</span>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;background:var(--soft);border-radius:999px;padding:4px">
+<sc-if value="{{ lightOn }}"><span style="height:44px;border-radius:999px;background:var(--card);box-shadow:0 1px 3px rgba(0,0,0,.12);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600">Светлая</span></sc-if>
+<sc-if value="{{ darkOn }}"><button type="button" onClick="{{ setLight }}" style="height:44px;border:0;border-radius:999px;background:transparent;color:var(--ink2);font-family:inherit;font-size:15px;font-weight:500;cursor:pointer">Светлая</button></sc-if>
+<sc-if value="{{ darkOn }}"><span style="height:44px;border-radius:999px;background:var(--card);box-shadow:0 1px 3px rgba(0,0,0,.3);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600">Тёмная</span></sc-if>
+<sc-if value="{{ lightOn }}"><button type="button" onClick="{{ setDark }}" style="height:44px;border:0;border-radius:999px;background:transparent;color:var(--ink2);font-family:inherit;font-size:15px;font-weight:500;cursor:pointer">Тёмная</button></sc-if>
+</div>
+</div>
+<button type="button" onClick="{{ toggleSfx }}" role="switch" aria-checked="{{ sfxOnStr }}" style="height:52px;border-radius:16px;border:1px solid var(--line);background:var(--paper);color:var(--ink);display:flex;align-items:center;justify-content:space-between;padding:0 16px;font-family:inherit;font-size:15px;font-weight:500;cursor:pointer"><span>Звуки интерфейса</span><sc-if value="{{ sfxOn }}"><span style="width:46px;height:28px;border-radius:14px;background:var(--ok);position:relative;flex:none"><span style="position:absolute;top:3px;right:3px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25)"></span></span></sc-if><sc-if value="{{ sfxOff }}"><span style="width:46px;height:28px;border-radius:14px;background:var(--dim);position:relative;flex:none"><span style="position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25)"></span></span></sc-if></button>
+<div style="display:flex;flex-direction:column;gap:8px"><span style="font-size:13px;font-weight:600;color:var(--ink2)">Сбросить прогресс</span>
+<sc-if value="{{ noResetRows }}"><span style="font-size:14px;color:var(--ink3)">Пока нечего сбрасывать.</span></sc-if>
+<sc-if value="{{ hasResetRows }}"><div style="border:1px solid var(--line);border-radius:18px;background:var(--line2);overflow:hidden;display:flex;flex-direction:column;gap:1px">
+<sc-for list="{{ resetRows }}" as="r">
+<sc-if value="{{ r.idle }}"><button type="button" onClick="{{ r.onAsk }}" style="min-height:48px;border:0;background:var(--paper);color:var(--ink);display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 16px;font-family:inherit;font-size:14.5px;font-weight:500;cursor:pointer;text-align:left"><span>{{ r.label }}</span><span style="flex:none;color:var(--bad);font-size:13.5px;font-weight:600">Сбросить</span></button></sc-if>
+<sc-if value="{{ r.asking }}"><div style="background:var(--badbg);padding:14px 16px;display:flex;flex-direction:column;gap:12px"><span style="font-size:14px;line-height:1.45;color:var(--ink)">{{ r.warn }}</span><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><button type="button" onClick="{{ r.onDo }}" style="height:44px;border:0;border-radius:999px;background:var(--bad);color:#fff;font-family:inherit;font-size:15px;font-weight:600;cursor:pointer">Сбросить</button><button type="button" onClick="{{ cancelReset }}" style="height:44px;border-radius:999px;border:1.5px solid var(--ink);background:var(--card);color:var(--ink);font-family:inherit;font-size:15px;font-weight:600;cursor:pointer">Отмена</button></div></div></sc-if>
+</sc-for>
+</div></sc-if>
+</div>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{ confirmQuit }}">
+<div onClick="{{ cancelQuit }}" style="position:fixed;inset:0;background:rgba(10,10,12,.45);z-index:30;animation:fadeIn .2s ease-out"></div>
+<div role="dialog" aria-label="Выход" style="position:fixed;left:0;right:0;bottom:-28px;z-index:31;display:flex;justify-content:center;animation:sheetUp .55s cubic-bezier(.22,1.35,.45,1)">
+<div style="width:100%;max-width:560px;background:var(--card);color:var(--ink);border-radius:28px 28px 0 0;padding:10px 20px calc(52px + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:14px">
+<span style="align-self:center;width:40px;height:4px;border-radius:2px;background:var(--dim)"></span>
+<span style="font-family:'Unbounded',sans-serif;font-size:18px;font-weight:700">{{ quitTitle }}</span>
+<span style="font-size:15px;line-height:1.5;color:var(--ink2)">Ответы этого прохода не сохранятся. Пройти можно будет заново.</span>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px"><button type="button" onClick="{{ doQuit }}" style="height:52px;border-radius:999px;border:1.5px solid var(--ink);background:var(--card);color:var(--ink);font-family:inherit;font-size:15.5px;font-weight:600;cursor:pointer">Выйти</button><button type="button" onClick="{{ cancelQuit }}" style="height:52px;border:0;border-radius:999px;background:var(--btn);color:var(--btnfg);font-family:inherit;font-size:15.5px;font-weight:600;cursor:pointer;box-shadow:0 4px 0 var(--btnsh)">Остаться</button></div>
+</div>
+</div>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;payUrl&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  static BLOCKS = [
+ {
+  "id": "never",
+  "heb": "מעולם / לעולם",
+  "title": "Никогда",
+  "teaser": "Одно русское «никогда», два ивритских слова. Выбирает время глагола.",
+  "rule": {
+   "lead": "В русском одно слово «никогда». В иврите два, и между ними решает время глагола.",
+   "tr": "[[מעולם]] меолАм. [[לעולם]] леолАм. Ударная гласная пишется заглавной.",
+   "pairs": [
+    {
+     "label": "[[<mark>מ</mark>עולם לא]] + прошедшее",
+     "he": "מעולם לא הייתי בפריז.",
+     "ru": "Я никогда не был в Париже. (До сих пор ни разу.)"
+    },
+    {
+     "label": "[[<mark>ל</mark>עולם לא]] + будущее",
+     "he": "לעולם לא אחזור לשם.",
+     "ru": "Я никогда больше туда не вернусь. (Впредь.)"
+    }
+   ],
+   "notes": [
+    "Проверка: подставь «до сих пор» или «впредь». «До сих пор» даёт [[מעולם]], «впредь» даёт [[לעולם]].",
+    "[[לעולם]] без [[לא]] значит «навсегда»: [[לעולם אזכור אותך]], я буду помнить тебя всегда."
+   ]
+  },
+  "items": [
+   {
+    "t": "choice",
+    "q": "המדריך אמר לנו: ___ נשאיר חבר מאחור.",
+    "opts": [
+     "מעולם לא",
+     "לעולם לא"
+    ],
+    "a": 1,
+    "ru": "Инструктор сказал нам: мы никогда не оставим товарища позади.",
+    "why": "[[נשאיר]] в будущем. Обещание и правило на будущее берут [[לעולם]]."
+   },
+   {
+    "t": "choice",
+    "q": "אני בן ארבעים, אבל ___ עישנתי, אפילו לא סיגריה אחת.",
+    "opts": [
+     "מעולם לא",
+     "לעולם לא"
+    ],
+    "a": 0,
+    "ru": "Мне сорок, но я никогда не курил, ни одной сигареты.",
+    "why": "[[עישנתי]] в прошедшем: за всю жизнь до сих пор. Значит [[מעולם]]."
+   },
+   {
+    "t": "choice",
+    "q": "הלקוח כתב בביקורת: ___ אחזור למסעדה הזאת, השירות היה נורא.",
+    "opts": [
+     "מעולם לא",
+     "לעולם לא"
+    ],
+    "a": 1,
+    "ru": "Клиент написал в отзыве: я больше никогда не вернусь в этот ресторан, обслуживание было ужасным.",
+    "why": "[[אחזור]] в будущем. Обслуживание в прошлом, но решает время главного глагола."
+   },
+   {
+    "t": "choice",
+    "q": "דנה סיפרה שהיא ___ נסעה לבד לחו״ל, וזו הפעם הראשונה.",
+    "opts": [
+     "מעולם לא",
+     "לעולם לא"
+    ],
+    "a": 0,
+    "ru": "Дана рассказала, что никогда не ездила за границу одна, и вот это первый раз.",
+    "why": "[[נסעה]] в прошедшем, и фраза сама говорит «первый раз»: до сих пор ни разу."
+   },
+   {
+    "t": "choice",
+    "q": "אל תדאג, ___ אגלה את הסוד שלך.",
+    "opts": [
+     "מעולם לא",
+     "לעולם לא"
+    ],
+    "a": 1,
+    "ru": "Не волнуйся, я никогда не раскрою твой секрет.",
+    "why": "[[אגלה]] в будущем."
+   }
+  ],
+  "n": 13
+ },
+ {
+  "id": "kol",
+  "heb": "כל / כל ה",
+  "title": "Каждый и весь",
+  "teaser": "Артикль [[ה]] превращает «каждый» в «весь».",
+  "rule": {
+   "lead": "",
+   "pairs": []
+  },
+  "items": [],
+  "n": 13
+ },
+ {
+  "id": "yihye",
+  "heb": "יהיה לי",
+  "title": "Будет: [[יהיה, יהיו, תהיה]]",
+  "teaser": "У меня, у тебя, у нас будет. Согласование и предлоги с местоимениями.",
+  "rule": {
+   "lead": "",
+   "pairs": []
+  },
+  "items": [],
+  "n": 19
+ },
+ {
+  "id": "alul",
+  "heb": "עלול / עשוי",
+  "title": "Может, способен, нужен",
+  "teaser": "Семь слов: может, способен, должен, готов, заинтересован, нуждается. После одних идёт глагол, после других предлог и существительное.",
+  "rule": {
+   "lead": "",
+   "pairs": []
+  },
+  "items": [],
+  "n": 14
+ }
+];
+  static DIAG = [
+  { block: "never", t: "choice", q: "___ ראיתי סרט כל כך מצחיק.", opts: ["מעולם לא", "לעולם לא"], a: 0,
+    ru: "Я никогда не видел такого смешного фильма.",
+    why: "[[ראיתי]] стоит в прошедшем, значит [[מעולם]]." },
+  { block: "kol", t: "choice", q: "הוא ישן ___ ולא ענה לטלפון.", opts: ["כל היום", "כל יום"], a: 0,
+    ru: "Он спал весь день и не отвечал на телефон.",
+    why: "«Весь день» это [[כל היום]], с артиклем." },
+  { block: "yihye", t: "choice", q: "בחודש הבא ___ לנו ארבע פגישות.", opts: ["יהיו", "יהיה", "תהיה"], a: 0,
+    ru: "В следующем месяце у нас будет четыре встречи.",
+    why: "[[פגישות]] во множественном числе, значит [[יהיו]]." },
+  { block: "alul", t: "choice", q: "החדר חשוך. אתה ___ להיתקל בשולחן.", opts: ["עלול", "עשוי"], a: 0,
+    ru: "В комнате темно. Ты можешь удариться о стол.",
+    why: "Удариться о стол это плохой исход: [[עלול]]." },
+  { block: "alul", t: "choice", q: "אני ___ לעזרה, כי אני לא מצליח לבד.", opts: ["זקוק", "אמור", "מסוגל"], a: 0,
+    ru: "Мне нужна помощь, я не справляюсь один.",
+    why: "[[זקוק]] берёт [[ל]] и существительное: [[זקוק לעזרה]]." },
+];
+  static HEBM = { never: '<mark>מ</mark>עולם / <mark>ל</mark>עולם', kol: 'כל / כל <mark>ה</mark>', yihye: 'יהי<mark>ה</mark> לי', alul: 'עלול / עשוי' };
+  static LINKS = { tg: 'https://t.me/Andreas_Free' };
+  // Озвучка: номер фразы из сценария (1–83) → путь к mp3 или data:URI
+  static AUDIO = {"1":"audio/p01.mp3","2":"audio/p02.mp3","3":"audio/p03.mp3","4":"audio/p04.mp3","5":"audio/p05.mp3","6":"audio/p06.mp3","7":"audio/p07.mp3","79":"audio/p79.mp3","80":"audio/p80.mp3","81":"audio/p81.mp3","82":"audio/p82.mp3","83":"audio/p83.mp3"};
+  static NUMS = {"never-rule-1":1,"never-rule-2":2,"q-המדריך אמר לנו: ___ נשאיר חבר מאחור.":3,"q-אני בן ארבעים, אבל ___ עישנתי, אפילו לא סיגריה אחת.":4,"q-הלקוח כתב בביקורת: ___ אחזור למסעדה הזאת, השירות היה נורא.":5,"q-דנה סיפרה שהיא ___ נסעה לבד לחו״ל, וזו הפעם הראשונה.":6,"q-אל תדאג, ___ אגלה את הסוד שלך.":7,"q-___ ראיתי סרט כל כך מצחיק.":79,"q-הוא ישן ___ ולא ענה לטלפון.":80,"q-בחודש הבא ___ לנו ארבע פגישות.":81,"q-החדר חשוך. אתה ___ להיתקל בשולחן.":82,"q-אני ___ לעזרה, כי אני לא מצליח לבד.":83};
+  static DEMO_BLOCK = 'never';
+  static DEMO_LIMIT = 5;
+  static HE = { fontFamily: "'Fredoka',Georgia,serif", fontSize: '1.06em', lineHeight: 1.2, unicodeBidi: 'isolate' };
+  static MARK = { background: 'var(--marker)', color: 'var(--onmarker)', borderRadius: '.18em', padding: '0 .06em', whiteSpace: 'nowrap' };
+  static TRN = { display: 'block', fontFamily: "'Geologica',sans-serif", fontSize: '12px', fontWeight: 400, color: 'var(--ink2)', lineHeight: 1.2, marginTop: '2px' };
+
+  state = { view: 'home', qi: 0, ans: false, tick: 0, store: { diag: null, blocks: {}, resumes: {} }, dark: false, ruleOpen: false, shown: 0, toast: '', curBlock: null, settings: false, confirmReset: false, confirmQuit: false, confirmBlock: false, step: 0, sfx: true };
+  dir = 'fwd';
+  confRef = React.createRef();
+  sess = null;
+  screenRef = React.createRef();
+  fbRef = React.createRef();
+  optsRef = React.createRef();
+  barRef = React.createRef();
+
+  get demo() { return true; }
+  skey() { return 'mlbe_' + (this.demo ? 'demo' : 'full') + '_v1'; }
+  loadStore() {
+    let st = { diag: null, blocks: {} };
+    try { const raw = localStorage.getItem(this.skey()); if (raw) { const p = JSON.parse(raw); if (p && typeof p === 'object') st = Object.assign(st, p); } } catch (e) {}
+    if (st.resume) { st.resumes = Object.assign({}, st.resumes, { [st.resume.blockId]: st.resume }); delete st.resume; }
+    st.resumes = st.resumes || {};
+    return st;
+  }
+  saveStore(st) { try { localStorage.setItem(this.skey(), JSON.stringify(st)); } catch (e) {} this.setState({ store: st }); }
+
+  componentDidMount() {
+    let dark = false;
+    try { dark = localStorage.getItem('mlbe_theme') === 'dark'; } catch (e) {}
+    let ob = false;
+    try { ob = localStorage.getItem('mlbe_onboarded') === '1'; } catch (e) {}
+    let sfx = true;
+    try { sfx = localStorage.getItem('mlbe_sfx') !== '0'; } catch (e) {}
+    this.setState({ store: this.loadStore(), dark, view: ob ? 'home' : 'welcome', step: 0, sfx });
+    this.onDown = (e) => {
+      const b = e.target && e.target.closest && e.target.closest('button,a');
+      if (!b) return;
+      this.sfx('tap');
+      try { if (navigator.vibrate) navigator.vibrate(8); } catch (x) {}
+    };
+    document.addEventListener('pointerdown', this.onDown, { passive: true });
+    this.paintBody(dark);
+    this.onKey = (e) => this.handleKey(e);
+    window.addEventListener('keydown', this.onKey);
+  }
+  componentWillUnmount() { this.stopAudio(); window.removeEventListener('keydown', this.onKey); document.removeEventListener('pointerdown', this.onDown); cancelAnimationFrame(this.raf); clearTimeout(this.tt); }
+  paintBody(dark) { document.body.style.background = dark ? '#141519' : '#F6F4EE'; }
+
+  componentDidUpdate() {
+    const S = this.state;
+    const cur = { view: S.view, qi: S.qi, ans: S.ans, dark: S.dark, mode: this.props.mode, step: S.step };
+    const ps = this._prev || cur;
+    this._prev = cur;
+    if (ps.mode !== cur.mode) { this.sess = null; this.setState({ store: this.loadStore(), view: 'home' }); return; }
+    if (ps.dark !== S.dark) this.paintBody(S.dark);
+    if (ps.view !== S.view || ps.qi !== S.qi || ps.step !== S.step) {
+      this.stopAudio();
+      window.scrollTo(0, 0);
+      const dx = this.dir === 'back' ? -32 : 32;
+      this.dir = 'fwd';
+      this.anim(this.screenRef.current, [{ opacity: 0, transform: 'translateX(' + dx + 'px)' }, { opacity: 1, transform: 'none' }], { duration: 400, easing: 'cubic-bezier(.2,.85,.25,1)' });
+      if (ps.view !== S.view && ['result', 'diagres', 'finalres'].indexOf(S.view) > -1) this.countUp();
+      if (ps.view !== S.view && this.isCelebrate()) { clearTimeout(this.bt); this.bt = setTimeout(() => this.burst(), 550); }
+    }
+    if (!ps.ans && S.ans && S.view === 'session' && ps.qi === S.qi) {
+      const fb = this.fbRef.current;
+      if (fb && !this.reduced()) Array.from(fb.children).forEach((el, i) => el.animate([{ opacity: 0, transform: 'translateY(10px)' }, { opacity: 1, transform: 'none' }], { duration: 360, delay: 120 + i * 90, easing: 'cubic-bezier(.2,.8,.2,1)', fill: 'backwards' }));
+      const box = this.optsRef.current;
+      if (box && this.lastPickK != null && !this.reduced()) {
+        Array.from(box.children).forEach((el, k) => {
+          if (k === this.lastPickK) {
+            el.animate(this.lastOk
+              ? [{ transform: 'scale(.94)' }, { transform: 'scale(1.04)', offset: 0.45 }, { transform: 'scale(.99)', offset: 0.75 }, { transform: 'scale(1)' }]
+              : [{ transform: 'scale(.95)' }, { transform: 'translateX(-7px)', offset: 0.3 }, { transform: 'translateX(6px)', offset: 0.55 }, { transform: 'translateX(-3px)', offset: 0.8 }, { transform: 'none' }], { duration: 520, easing: 'ease-out' });
+          } else if (el.dataset && el.dataset.dim) {
+            el.animate([{ opacity: 1 }, { opacity: 0.5 }], { duration: 450, easing: 'ease-out' });
+          } else if (el.dataset && el.dataset.ok) {
+            el.animate([{ transform: 'scale(1)' }, { transform: 'scale(1.03)' }, { transform: 'scale(1)' }], { duration: 480, delay: 220, easing: 'ease-out' });
+          }
+        });
+      }
+    }
+  }
+  reduced() { try { return matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) { return false; } }
+  anim(el, k, o) { if (!el || !el.animate || this.reduced()) return; el.animate(k, o); }
+  countUp() {
+    const S = this.state, s = this.sess;
+    const target = S.view === 'diagres' ? (S.store.diag ? S.store.diag.correct : 0) : (s ? s.points : 0);
+    cancelAnimationFrame(this.raf);
+    if (this.reduced() || !target) { this.setState({ shown: target }); return; }
+    const t0 = performance.now(), d = Math.min(1000, 380 + target * 40);
+    const step = (t) => { const p = Math.min(1, (t - t0) / d), e = 1 - Math.pow(1 - p, 3); this.setState({ shown: Math.round(target * e) }); if (p < 1) this.raf = requestAnimationFrame(step); };
+    this.setState({ shown: 0 });
+    this.raf = requestAnimationFrame(step);
+  }
+  buzz(ok) { try { if (navigator.vibrate) navigator.vibrate(ok ? 14 : [30, 50, 30]); } catch (e) {} }
+
+  R = (str) => {
+    const h = React.createElement, C = Component;
+    const parts = String(str == null ? '' : str).split(/(\[\[|\]\]|<mark>|<\/mark>|<span class="trn">|<\/span>)/);
+    const root = { t: 'root', c: [] }, st = [root];
+    parts.forEach((p) => {
+      if (!p) return;
+      const top = st[st.length - 1];
+      if (p === '[[' || p === '<mark>' || p === '<span class="trn">') { const n = { t: p === '[[' ? 'he' : p === '<mark>' ? 'mark' : 'trn', c: [] }; top.c.push(n); st.push(n); }
+      else if (p === ']]' || p === '</mark>' || p === '</span>') { if (st.length > 1) st.pop(); }
+      else top.c.push(p);
+    });
+    const mk = (n) => {
+      const kids = n.c.map((x) => (typeof x === 'string' ? x : mk(x)));
+      if (n.t === 'he') return h('span', { dir: 'rtl', lang: 'he', style: C.HE }, ...kids);
+      if (n.t === 'mark') return h('span', { style: C.MARK }, ...kids);
+      if (n.t === 'trn') return h('span', { style: C.TRN }, ...kids);
+      return h(React.Fragment, null, ...kids);
+    };
+    return mk(root);
+  };
+  gapNode(text) {
+    const h = React.createElement;
+    if (!text) return h('span', { style: { display: 'inline-block', minWidth: '3.2em', height: '1.1em', verticalAlign: '-.18em', borderRadius: '.25em', background: 'var(--soft)', border: '1.5px dashed var(--ink3)', margin: '0 .1em' } });
+    return h('span', { style: { fontWeight: 700, whiteSpace: 'nowrap', color: 'var(--onmarker)', padding: '0 .16em', borderRadius: '.2em', backgroundImage: 'linear-gradient(var(--marker),var(--marker))', backgroundRepeat: 'no-repeat', backgroundPosition: 'right center', backgroundSize: '100% 100%', animation: 'mkSweep .6s cubic-bezier(.2,.8,.2,1) both' } }, text);
+  }
+
+  shuffle(a) { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); const t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+  units(it) { return it.t === 'bank' ? it.sents.length : 1; }
+  maxFor(items) { return items.reduce((n, it) => n + this.units(it), 0); }
+  blockById(id) { return Component.BLOCKS.filter((b) => b.id === id)[0]; }
+  isLocked(b) { return this.demo && b.id !== Component.DEMO_BLOCK; }
+  itemsFor(b) { return (this.demo && b.id === Component.DEMO_BLOCK) ? b.items.slice(0, Component.DEMO_LIMIT) : b.items; }
+  blockUnits(b) { return b.n != null ? b.n : this.maxFor(b.items); }
+  totalUnits() { return Component.BLOCKS.reduce((n, b) => n + this.blockUnits(b), 0); }
+  finalUnlocked() { const st = this.state.store; return Component.BLOCKS.every((b) => !!st.blocks[b.id]); }
+  voiceOn() { return true; }
+  // Номер фразы = номер в сценарии озвучки (1–83)
+  tblEx(str) { return (String(str).match(/\[\[(.+?)\]\]/g) || []).map((x) => x.slice(2, -2)).filter((x) => x.length > 2); }
+  numFor(key) {
+    if (Component.NUMS) return Component.NUMS[key];
+    if (!this._nums) {
+      const m = {}; let n = 0;
+      Component.BLOCKS.forEach((b) => {
+        (b.rule.pairs || []).forEach((p, k) => { m[b.id + '-rule-' + (k + 1)] = ++n; });
+        const t = b.rule.table;
+        if (t && t.wide) t.rows.forEach((row, r) => (row[3] ? row[3].map((x) => x[0]) : this.tblEx(row[2])).forEach((ex, k) => { m[b.id + '-tbl-' + r + '-' + k] = ++n; }));
+        b.items.forEach((it) => { if (it.t === 'bank') it.sents.forEach((x) => { m['bank-' + x.pre] = ++n; }); else m['q-' + (it.q || it.prompt)] = ++n; });
+      });
+      Component.DIAG.forEach((x) => { m['q-' + x.q] = ++n; });
+      this._nums = m;
+    }
+    return this._nums[key];
+  }
+  idFor(it) { return 'q-' + (it.q || it.prompt); }
+  answered() { const s = this.sess; if (!s) return false; const it = s.items[s.i]; return it.t === 'choice' ? s.cur.picked !== null : s.cur.checked; }
+
+  goHome = () => { this.dir = 'back'; this.setState({ view: 'home', ruleOpen: false }); };
+  openBlock = (id) => { const b = this.blockById(id); this.setState({ curBlock: id, view: this.isLocked(b) ? 'lock' : 'intro', ruleOpen: false, confirmBlock: false }); };
+  startBlock = () => { const b = this.blockById(this.state.curBlock); this.clearResume(b.id); this.startSession('block', b.id, this.itemsFor(b)); };
+  startDiag = () => this.startSession('diag', null, Component.DIAG.slice());
+  startFinal = () => {
+    if (this.demo) { this.setState({ view: 'lockfinal' }); return; }
+    if (!this.finalUnlocked()) { this.setState({ view: 'finalwait' }); return; }
+    const items = [];
+    Component.BLOCKS.forEach((b) => {
+      this.shuffle(b.items.filter((it) => it.t === 'choice')).slice(0, 5).forEach((it) => { const c = Object.assign({}, it); c.block = b.id; items.push(c); });
+    });
+    this.startSession('final', null, this.shuffle(items));
+  };
+  startSession(kind, blockId, items) {
+    this.sess = { kind, blockId, items, i: 0, marks: [], points: 0, max: this.maxFor(items), missed: [], byBlock: {}, fb: {}, cur: null, curs: [] };
+    this.prepCur();
+    this.setState((S) => ({ view: 'session', qi: 0, ans: false, ruleOpen: false, curBlock: blockId || S.curBlock, tick: S.tick + 1 }));
+  }
+  prepCur() {
+    const s = this.sess, it = s.items[s.i];
+    if (it.t === 'choice') { s.cur = { order: this.shuffle(it.opts.map((o, idx) => ({ o, idx }))), picked: null }; s.curs[s.i] = s.cur; return; }
+    let chips = [];
+    for (let tries = 0; tries < 40; tries++) {
+      chips = this.shuffle(it.sents.map((x) => x.a).concat(it.extra || []));
+      const pos = it.sents.map((x) => chips.indexOf(x.a));
+      if (!pos.every((p, k) => k === 0 || p > pos[k - 1])) break;
+    }
+    s.cur = { chips, fill: it.sents.map(() => null), active: null, checked: false };
+    s.curs[s.i] = s.cur;
+  }
+  pick(idx) {
+    const s = this.sess; if (!s) return;
+    const it = s.items[s.i];
+    if (it.t !== 'choice' || s.cur.picked !== null) return;
+    s.cur.picked = idx;
+    const ok = idx === it.a;
+    this.lastOk = ok;
+    this.lastPickK = s.cur.order.findIndex((x) => x.idx === idx);
+    this.feedbackFx(ok);
+    s.marks[s.i] = ok ? 'ok' : 'bad';
+    if (ok) s.points += 1; else s.missed.push({ item: it, picked: idx });
+    if (s.kind === 'diag') s.byBlock[it.block] = (s.byBlock[it.block] !== false) && ok;
+    if (s.kind === 'final') { const bk = it.block; s.fb[bk] = s.fb[bk] || { ok: 0, total: 0 }; s.fb[bk].total++; if (ok) s.fb[bk].ok++; }
+    this.buzz(ok);
+    this.setState({ ans: true });
+  }
+  tapChip(k) {
+    const c = this.sess.cur;
+    if (c.checked || c.fill.indexOf(k) > -1) return;
+    const target = (c.active !== null && c.fill[c.active] === null) ? c.active : c.fill.indexOf(null);
+    if (target < 0) return;
+    c.fill[target] = k; c.active = null;
+    this.sfx('mark', 0.6);
+    this.setState((S) => ({ tick: S.tick + 1 }), () => this.ensureGap());
+  }
+  tapGap(i) {
+    const c = this.sess.cur;
+    if (c.checked) return;
+    if (c.fill[i] !== null) { c.fill[i] = null; c.active = i; } else { c.active = c.active === i ? null : i; }
+    this.setState((S) => ({ tick: S.tick + 1 }));
+  }
+  check = () => {
+    const s = this.sess, it = s.items[s.i], c = s.cur;
+    if (!c.fill.every((x) => x !== null)) return;
+    c.checked = true;
+    const wrongS = []; let good = 0;
+    it.sents.forEach((x, i) => { const f = c.fill[i]; if (f !== null && c.chips[f] === x.a) good++; else wrongS.push(x); });
+    s.points += good;
+    s.marks[s.i] = good === it.sents.length ? 'ok' : (good === 0 ? 'bad' : 'part');
+    if (wrongS.length) { const copy = Object.assign({}, it); copy.sents = wrongS; s.missed.push({ item: copy, picked: null }); }
+    this.lastOk = good === it.sents.length;
+    this.lastPickK = null;
+    this.feedbackFx(this.lastOk);
+    this.buzz(this.lastOk);
+    this.setState({ ans: true });
+  };
+  next = () => {
+    const s = this.sess;
+    if (s.i >= s.items.length - 1) { this.finish(); return; }
+    s.i++;
+    if (s.curs[s.i]) s.cur = s.curs[s.i]; else this.prepCur();
+    this.saveResume();
+    this.setState({ qi: s.i, ans: this.answered() });
+  };
+  prev = () => {
+    const s = this.sess; if (!s || s.i === 0 || !s.curs[s.i - 1]) return;
+    this.dir = 'back'; s.i--; s.cur = s.curs[s.i];
+    this.setState({ qi: s.i, ans: this.answered() });
+  };
+  finish() {
+    const s = this.sess, st = Object.assign({}, this.state.store);
+    if (s.kind === 'final') {
+      const pf = st.final || { best: 0 };
+      st.final = { best: Math.max(pf.best || 0, s.points), max: s.max };
+      this.saveStore(st); this.setState({ view: 'finalres' }); return;
+    }
+    if (s.kind === 'diag') {
+      const weak = [];
+      ['never', 'kol', 'yihye', 'alul'].forEach((id) => { if (s.byBlock[id] === false) weak.push(id); });
+      st.diag = { correct: s.points, weak, byBlock: s.byBlock };
+      this.saveStore(st); this.setState({ view: 'diagres' }); return;
+    }
+    if (s.kind === 'block') {
+      const prev = st.blocks[s.blockId] || { best: 0, max: 0 };
+      const b = { best: Math.max(prev.best || 0, s.points), max: s.max };
+      st.blocks = Object.assign({}, st.blocks, { [s.blockId]: b });
+      st.resumes = Object.assign({}, st.resumes); delete st.resumes[s.blockId]; delete st.resume;
+      this.saveStore(st);
+    }
+    this.setState({ view: 'result' });
+  }
+  review = () => { const s = this.sess; this.startSession('review', s.blockId, s.missed.map((m) => m.item)); };
+  again = () => { const b = this.blockById((this.sess && this.sess.blockId) || this.state.curBlock); this.startSession('block', b.id, this.itemsFor(b)); };
+  quit = () => {
+    const s = this.sess;
+    if (s && (s.kind === 'diag' || s.kind === 'final') && s.marks.length) { this.setState({ confirmQuit: true }); return; }
+    this.doQuit();
+  };
+  doQuit = () => {
+    const s = this.sess, blk = s && s.kind === 'block';
+    if (blk && this.resumeIdx() >= s.items.length) { this.setState({ confirmQuit: false }); this.finish(); return; }
+    if (blk) this.saveResume();
+    this.dir = 'back';
+    this.setState({ view: (s && s.kind !== 'diag' && s.kind !== 'final' && this.state.curBlock) ? 'intro' : 'home', ruleOpen: false, confirmQuit: false });
+    if (blk && this.resumeIdx() > 0) this.showToast('Место сохранено, можно продолжить');
+  };
+  cancelQuit = () => this.setState({ confirmQuit: false });
+  toggleRule = () => this.setState((S) => ({ ruleOpen: !S.ruleOpen }));
+  toggleTheme = () => { const dark = !this.state.dark; try { localStorage.setItem('mlbe_theme', dark ? 'dark' : 'light'); } catch (e) {} this.setState({ dark }); };
+  voice(id) {
+    const src = Component.AUDIO[this.numFor(id)];
+    if (!src) { this.showToast('Озвучка появится в обновлении'); return; }
+    try { this.stopAudio(); this.audio = new Audio(src); this.audio.play().catch(() => this.showToast('Не удалось включить звук')); } catch (e) {}
+  }
+  stopAudio() { try { if (this.audio) { this.audio.pause(); this.audio.currentTime = 0; } } catch (e) {} this.audio = null; }
+  showToast(msg) { clearTimeout(this.tt); this.setState({ toast: msg }); this.tt = setTimeout(() => this.setState({ toast: '' }), 2200); }
+  handleKey(e) {
+    if (this.state.view !== 'session' || !this.sess || e.ctrlKey || e.metaKey || e.altKey) return;
+    const s = this.sess, it = s.items[s.i];
+    if (it.t === 'choice' && s.cur.picked === null && /^[1-9]$/.test(e.key)) { const x = s.cur.order[parseInt(e.key, 10) - 1]; if (x) this.pick(x.idx); return; }
+    if (e.key === 'Enter') {
+      const a = document.activeElement;
+      if (a && a.tagName === 'BUTTON') return;
+      if (this.answered()) this.next(); else if (it.t === 'bank') this.check();
+    }
+  }
+
+  feedbackFx(ok) {
+    const s = this.sess;
+    s.streak = ok ? (s.streak || 0) + 1 : 0;
+    this.sfx(ok ? 'ok' : 'bad');
+    this.sfx('mark', 0.8);
+    if (ok && s.streak >= 3) {
+      setTimeout(() => this.sfx('streak'), 280);
+      try { if (navigator.vibrate) setTimeout(() => navigator.vibrate([12, 40, 12]), 280); } catch (e) {}
+    }
+  }
+  sfxCtx() {
+    if (this.state.sfx === false) return null;
+    try {
+      if (!this._ac) { const A = window.AudioContext || window.webkitAudioContext; if (!A) return null; this._ac = new A(); this._mg = this._ac.createGain(); this._mg.gain.value = 0.9; this._mg.connect(this._ac.destination); }
+      if (this._ac.state === 'suspended') this._ac.resume();
+      return this._ac;
+    } catch (e) { return null; }
+  }
+  tone(ac, t0, f, dur, gain, type, f2) {
+    const o = ac.createOscillator(), g = ac.createGain();
+    o.type = type || 'sine';
+    o.frequency.setValueAtTime(f, t0);
+    if (f2) o.frequency.exponentialRampToValueAtTime(f2, t0 + dur);
+    g.gain.setValueAtTime(0.0001, t0);
+    g.gain.exponentialRampToValueAtTime(gain, t0 + 0.006);
+    g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+    o.connect(g); g.connect(this._mg);
+    o.start(t0); o.stop(t0 + dur + 0.03);
+  }
+  scratch(ac, t0, dur, gain) {
+    const sr = ac.sampleRate, len = Math.floor(sr * dur), buf = ac.createBuffer(1, len, sr), d = buf.getChannelData(0);
+    for (let i = 0; i < len; i++) { const t = i / sr; d[i] = (Math.random() * 2 - 1) * (0.55 + 0.45 * Math.sin(2 * Math.PI * 31 * t)); }
+    const src = ac.createBufferSource(); src.buffer = buf;
+    const bp = ac.createBiquadFilter(); bp.type = 'bandpass'; bp.frequency.setValueAtTime(2200, t0); bp.frequency.linearRampToValueAtTime(3200, t0 + dur); bp.Q.value = 0.8;
+    const g = ac.createGain();
+    g.gain.setValueAtTime(0.0001, t0); g.gain.linearRampToValueAtTime(gain, t0 + 0.05); g.gain.setValueAtTime(gain, t0 + dur * 0.7); g.gain.linearRampToValueAtTime(0.0001, t0 + dur);
+    src.connect(bp); bp.connect(g); g.connect(this._mg); src.start(t0);
+  }
+  sfx(kind, k) {
+    const ac = this.sfxCtx(); if (!ac) return;
+    const t = ac.currentTime + 0.01, v = k || 1;
+    if (kind === 'tap') { this.tone(ac, t, 1500, 0.04, 0.03, 'sine', 900); }
+    else if (kind === 'ok') { this.tone(ac, t, 1046.5, 0.55, 0.06); this.tone(ac, t, 2093, 0.3, 0.018); this.tone(ac, t + 0.09, 1568, 0.7, 0.05); }
+    else if (kind === 'bad') { this.tone(ac, t, 210, 0.24, 0.11, 'sine', 120); this.tone(ac, t + 0.01, 320, 0.14, 0.025, 'triangle', 190); }
+    else if (kind === 'mark') { this.scratch(ac, t + 0.04, 0.5, 0.045 * v); }
+    else if (kind === 'streak') { [1318.5, 1568, 2093].forEach((f, i) => this.tone(ac, t + i * 0.075, f, 0.4, 0.045)); }
+  }
+  toggleSfx = () => { const sfx = this.state.sfx === false; try { localStorage.setItem('mlbe_sfx', sfx ? '1' : '0'); } catch (e) {} this.setState({ sfx }); };
+  press(fn) {
+    return (e) => {
+      const btn = e && e.currentTarget, dot = btn && btn.querySelector ? btn.querySelector('[data-dot]') : null;
+      if (!dot || this.reduced()) { fn(e); return; }
+      if (this._pressing) return;
+      this._pressing = true;
+      const r = btn.getBoundingClientRect(), d = dot.getBoundingClientRect();
+      const sc = (Math.hypot(r.width, r.height) * 2.1) / Math.max(d.width, 1);
+      const a1 = dot.animate([{ transform: 'scale(1)' }, { transform: 'scale(' + sc + ')' }], { duration: 320, easing: 'cubic-bezier(.4,0,.2,1)', fill: 'forwards' });
+      const lbl = btn.querySelector('[data-lbl]');
+      const to = (getComputedStyle(btn).getPropertyValue('--onmarker') || '#1B1B1F').trim();
+      const a2 = lbl ? lbl.animate([{ color: getComputedStyle(lbl).color }, { color: to }], { duration: 220, fill: 'forwards' }) : null;
+      setTimeout(() => { this._pressing = false; fn(e); requestAnimationFrame(() => { a1.cancel(); if (a2) a2.cancel(); }); }, 230);
+    };
+  }
+  openSettings = () => this.setState({ settings: true, confirmReset: false });
+  closeSettings = () => this.setState({ settings: false, confirmReset: false });
+  setTheme(dark) { try { localStorage.setItem('mlbe_theme', dark ? 'dark' : 'light'); } catch (e) {} this.setState({ dark }); }
+  setLight = () => this.setTheme(false);
+  setDark = () => this.setTheme(true);
+  askReset(key) { this.setState({ confirmReset: key }); }
+  cancelReset = () => this.setState({ confirmReset: false });
+  doReset = () => this.resetKey(this.state.confirmReset);
+  askBlockReset = () => this.setState({ confirmBlock: true });
+  cancelBlockReset = () => this.setState({ confirmBlock: false });
+  doBlockReset = () => this.resetKey(this.state.curBlock);
+  resetKey(key) {
+    if (!key) return;
+    const S = this.state, safe = ['home', 'intro', 'welcome', 'lock', 'lockfinal', 'finalwait'].indexOf(S.view) > -1;
+    let st, msg;
+    if (key === 'all') { try { localStorage.removeItem(this.skey()); } catch (e) {} st = { diag: null, blocks: {}, resumes: {} }; msg = 'Весь прогресс сброшен'; }
+    else {
+      st = Object.assign({}, S.store);
+      if (key === 'diag') { st.diag = null; msg = 'Диагностика сброшена'; }
+      else if (key === 'final') { delete st.final; msg = 'Итоговый тест сброшен'; }
+      else { st.blocks = Object.assign({}, st.blocks); delete st.blocks[key]; st.resumes = Object.assign({}, st.resumes); delete st.resumes[key]; msg = 'Прогресс блока сброшен'; }
+      this.saveStore(st);
+    }
+    const leave = key === 'all' || !safe;
+    if (leave) this.sess = null;
+    this.setState({ store: st, confirmReset: false, confirmBlock: false, settings: key === 'all' ? false : S.settings, view: leave ? 'home' : S.view });
+    this.showToast(msg);
+  }
+  showWelcome = () => this.setState({ view: 'welcome', step: 0, settings: false });
+  doneWelcome() { try { localStorage.setItem('mlbe_onboarded', '1'); } catch (e) {} }
+  wNext = () => {
+    if (this.state.step < 2) { this.setState((S) => ({ step: S.step + 1 })); return; }
+    this.doneWelcome();
+    if (this.state.store.diag) this.setState({ view: 'home' }); else this.startDiag();
+  };
+  wSkip = () => { this.doneWelcome(); this.setState({ view: 'home' }); };
+
+  saveResume() {
+    const s = this.sess; if (!s || s.kind !== 'block') return;
+    const i = this.resumeIdx(); if (i <= 0 || i >= s.items.length) return;
+    const st = Object.assign({}, this.state.store);
+    st.resumes = Object.assign({}, st.resumes); st.resumes[s.blockId] = { blockId: s.blockId, i, ts: Date.now(), n: s.items.length, marks: s.marks.slice(), points: s.points,
+      missed: s.missed.map((m) => ({ k: s.items.findIndex((x) => x === m.item || (x.t === 'bank' && x.title === m.item.title)), picked: m.picked, wrong: m.item.t === 'bank' ? m.item.sents.map((x) => x.a) : null })) };
+    this.saveStore(st);
+  }
+  clearResume(id) { const st = this.state.store; if (!st.resumes || !st.resumes[id]) return; const n = Object.assign({}, st); n.resumes = Object.assign({}, st.resumes); delete n.resumes[id]; this.saveStore(n); }
+  resumeBlock = (id) => {
+    const st = this.state.store, rid = typeof id === 'string' ? id : (this.latestResume(st) || {}).blockId;
+    const r = rid && st.resumes && st.resumes[rid], b = r && this.blockById(r.blockId);
+    if (!b) return;
+    const items = this.itemsFor(b);
+    if (r.n !== items.length || r.i >= items.length) { this.clearResume(b.id); this.openBlock(b.id); return; }
+    const missed = (r.missed || []).filter((x) => items[x.k]).map((x) => {
+      const it = items[x.k];
+      if (it.t === 'bank') { const c = Object.assign({}, it); c.sents = it.sents.filter((sn) => (x.wrong || []).indexOf(sn.a) > -1); return { item: c, picked: null }; }
+      return { item: it, picked: x.picked };
+    });
+    this.sess = { kind: 'block', blockId: b.id, items, i: r.i, marks: r.marks.slice(), points: r.points, max: this.maxFor(items), missed, byBlock: {}, fb: {}, cur: null, curs: [] };
+    this.prepCur();
+    this.setState((S) => ({ view: 'session', qi: r.i, ans: false, ruleOpen: false, curBlock: b.id, tick: S.tick + 1 }));
+  };
+  latestResume(st) { const m = st.resumes || {}; const all = Object.keys(m).map((k) => m[k]).filter((r) => { const b = r && this.blockById(r.blockId); return b && !this.isLocked(b); }); all.sort((a, b) => (b.ts || 0) - (a.ts || 0)); return all[0] || null; }
+  resumeIdx() { const s = this.sess; if (!s || !s.curs) return 0; const k = s.curs.length - 1, c = s.curs[k], it = s.items[k]; if (!c) return Math.max(k, 0); const done = it.t === 'choice' ? c.picked !== null : c.checked; return done ? k + 1 : k; }
+  ensureGap() {
+    requestAnimationFrame(() => {
+      const g = document.querySelector('[data-gapsel]'), bar = this.barRef.current;
+      if (!g) return;
+      const r = g.getBoundingClientRect(), lim = (bar ? bar.getBoundingClientRect().top : window.innerHeight) - 12;
+      if (r.bottom > lim) window.scrollBy({ top: r.bottom - lim + 24, behavior: 'smooth' });
+      else if (r.top < 80) window.scrollBy({ top: r.top - 100, behavior: 'smooth' });
+    });
+  }
+  nextTarget(st) {
+    const weak = (st.diag && st.diag.weak) || [];
+    const notDone = Component.BLOCKS.filter((b) => !this.isLocked(b) && !st.blocks[b.id]);
+    const w = notDone.filter((b) => weak.indexOf(b.id) > -1)[0];
+    if (w) return { type: 'weak', b: w };
+    if (notDone[0]) return { type: 'block', b: notDone[0] };
+    if (this.demo) return { type: 'paywall' };
+    if (!st.final) return { type: 'final' };
+    return null;
+  }
+  isCelebrate() {
+    const S = this.state, s = this.sess;
+    if (!s) return false;
+    if (S.view === 'result' && s.kind === 'block') return s.points / s.max >= 0.9;
+    if (S.view === 'finalres') return s.points / s.max >= 0.9;
+    return false;
+  }
+  confettiNode() {
+    const h = React.createElement, G = ['מ', 'ל', 'ה', 'ו', 'ב', 'כ', 'י', 'ע'];
+    const kids = [];
+    for (let i = 0; i < 26; i++) {
+      const glyph = i % 3 !== 2;
+      kids.push(h('span', { key: i, style: glyph
+        ? { position: 'absolute', left: 0, top: 0, opacity: 0, fontFamily: "'Fredoka',serif", fontWeight: 700, fontSize: (18 + (i * 7) % 18) + 'px', lineHeight: 1, color: i % 2 ? 'var(--onmarker)' : 'var(--ink)' }
+        : { position: 'absolute', left: 0, top: 0, opacity: 0, width: '10px', height: '10px', borderRadius: '2px', background: i % 2 ? 'var(--onmarker)' : '#FFFFFF' } }, glyph ? G[i % G.length] : null));
+    }
+    return h('div', { ref: this.confRef, 'aria-hidden': true, style: { position: 'absolute', left: '50%', top: '40%', width: 0, height: 0, pointerEvents: 'none', zIndex: 3 } }, ...kids);
+  }
+  burst() {
+    const el = this.confRef.current;
+    try { if (navigator.vibrate) navigator.vibrate([20, 40, 20, 40, 60]); } catch (e) {}
+    if (!el || this.reduced()) return;
+    Array.from(el.children).forEach((c) => {
+      const a = Math.random() * Math.PI * 2, dist = 90 + Math.random() * 150;
+      const dx = Math.cos(a) * dist * 1.2, dy = Math.sin(a) * dist * 0.8 - 40, r = (Math.random() * 2 - 1) * 240;
+      c.animate([
+        { opacity: 1, transform: 'translate(-50%,-50%) scale(.3)' },
+        { opacity: 1, offset: 0.6, transform: 'translate(' + dx + 'px,' + dy + 'px) rotate(' + r + 'deg) scale(1)' },
+        { opacity: 0, transform: 'translate(' + dx * 1.08 + 'px,' + (dy + 70) + 'px) rotate(' + r * 1.4 + 'deg) scale(.9)' },
+      ], { duration: 1100 + Math.random() * 700, delay: Math.random() * 120, easing: 'cubic-bezier(.15,.7,.3,1)', fill: 'forwards' });
+    });
+  }
+
+  rootStyle() {
+    const L = { '--paper': '#F6F4EE', '--dot': 'rgba(27,27,31,.10)', '--card': '#FFFFFF', '--line': '#E4E0D5', '--line2': '#EEEAE0', '--soft': '#F1EEE6', '--ink': '#1B1B1F', '--ink2': '#5E5B53', '--ink3': '#8A867B', '--marker': '#FFE14D', '--onmarker': '#1B1B1F', '--btn': '#1B1B1F', '--btnfg': '#FFFFFF', '--btnsh': '#000000', '--ok': '#1E8A5F', '--okbg': '#E3F3EA', '--okfg': '#11633F', '--bad': '#D4373F', '--badbg': '#FBE7E7', '--badfg': '#9A2229', '--dim': '#D8D3C6' };
+    const D = { '--paper': '#141519', '--dot': 'rgba(255,255,255,.07)', '--card': '#1D1E23', '--line': '#2E2F36', '--line2': '#26272D', '--soft': '#26272D', '--ink': '#F2F0EA', '--ink2': '#A9A69C', '--ink3': '#7C7A72', '--marker': '#FFE14D', '--onmarker': '#1B1B1F', '--btn': '#F2F0EA', '--btnfg': '#141519', '--btnsh': '#9C9A92', '--ok': '#3FB983', '--okbg': 'rgba(63,185,131,.14)', '--okfg': '#86E0B6', '--bad': '#EF5E66', '--badbg': 'rgba(239,94,102,.14)', '--badfg': '#FFA3A8', '--dim': '#3A3B42' };
+    return Object.assign({}, this.state.dark ? D : L, { minHeight: '100vh', backgroundColor: 'var(--paper)', backgroundImage: 'radial-gradient(var(--dot) 1px, transparent 1.3px)', backgroundSize: '24px 24px', color: 'var(--ink)', fontFamily: "'Geologica',system-ui,-apple-system,sans-serif", fontSize: '16px', lineHeight: 1.5, WebkitTapHighlightColor: 'transparent', transition: 'background-color .3s, color .3s' });
+  }
+  ruleVals(b) {
+    const R = this.R, r = b.rule, t = r.table;
+    return {
+      rLead: R(r.lead), rHasTr: !!r.tr, rTr: R(r.tr || ''),
+      rPairs: (r.pairs || []).map((p, k) => ({ label: R(p.label), he: R(p.he), ru: R(p.ru), voice: this.voiceOn(), onVoice: () => this.voice(b.id + '-rule-' + (k + 1)) })),
+      rHasTable: !!t, rTableTitle: t ? R(t.title) : '', rTwo: !!t && !t.wide, rWide: !!t && !!t.wide,
+      rRows: t ? t.rows.map((row, r) => { const list = !t.wide ? [] : (row[3] || this.tblEx(row[2]).map((he) => [he, ''])); const ex = list.map((x, k) => ({ he: x[0], ru: R(x[1]), voice: this.voiceOn(), onVoice: this.voiceOn() ? () => this.voice(b.id + '-tbl-' + r + '-' + k) : null })); return { c0: R(row[0]), c1: R(row[1]), c2: R(row[2]), ex, hasEx: ex.length > 0 }; }) : [],
+      rHasNotes: !!(r.notes && r.notes.length), rNotes: (r.notes || []).map((n) => ({ t: R(n) })),
+    };
+  }
+  missVals(m) {
+    const R = this.R, it = m.item;
+    if (it.t === 'choice') {
+      const he = it.q ? it.q.replace('___', '<mark>' + it.opts[it.a] + '</mark>') : it.opts[it.a];
+      return { isChoice: true, isBank: false, he: R(he), hasRu: !!(it.ru || it.prompt), ru: R(it.ru || it.prompt), why: R(it.why), lines: [] };
+    }
+    return { isChoice: false, isBank: true, lines: it.sents.map((x) => ({ he: R(x.pre + ' <mark>' + x.a + '</mark>' + (/^[.,!?]/.test(x.post) ? '' : ' ') + x.post), hint: R(x.hint) })), why: R(it.why), he: '', ru: '', hasRu: false };
+  }
+
+  renderVals() {
+    const S = this.state, s = this.sess, B = Component.BLOCKS, C = Component, v = S.view, st = S.store || { diag: null, blocks: {} }, demo = this.demo, R = this.R;
+    const o = { rootStyle: this.rootStyle(), screenRef: this.screenRef, fbRef: this.fbRef, optsRef: this.optsRef, toggleTheme: this.toggleTheme, themeLabel: S.dark ? 'Светлая тема' : 'Тёмная тема', toast: S.toast, hasToast: !!S.toast, payUrl: this.props.payUrl || '#', tgUrl: C.LINKS.tg };
+    o.isHome = v === 'home'; o.notHome = !o.isHome; o.isIntro = v === 'intro'; o.isLock = v === 'lock'; o.isLockFinal = v === 'lockfinal'; o.isFinalWait = v === 'finalwait';
+    o.isSession = v === 'session' && !!s; o.isResult = v === 'result' && !!s; o.isDiagRes = v === 'diagres' && !!st.diag; o.isFinalRes = v === 'finalres' && !!s;
+    o.isScore = o.isResult || o.isDiagRes || o.isFinalRes;
+    o.backIcon = o.isSession ? '✕' : '←'; o.backLabel = o.isSession ? 'Выйти' : 'К блокам'; o.onBack = o.isSession ? this.quit : this.goHome;
+    o.hasCounter = o.isSession; o.cntA = s ? s.i + 1 : ''; o.cntB = s ? s.items.length : '';
+    o.hasRuleBtn = o.isSession && (s.kind === 'block' || s.kind === 'review'); o.ruleBtnLabel = S.ruleOpen ? 'Скрыть' : 'Правило'; o.toggleRule = this.toggleRule; o.ruleOpen = o.hasRuleBtn && S.ruleOpen;
+
+    const total = this.totalUnits(), weak = (st.diag && st.diag.weak) || [];
+    o.totalCount = total + ' заданий';
+    o.hasDiag = !!st.diag; o.noDiag = !st.diag; o.diagCorrect = st.diag ? st.diag.correct : 0; o.startDiag = this.startDiag;
+    o.blocks = B.map((b, i) => {
+      const locked = this.isLocked(b), r = st.blocks[b.id];
+      const cnt = (demo && b.id === C.DEMO_BLOCK) ? C.DEMO_LIMIT + ' заданий в демо' : this.blockUnits(b) + ' заданий';
+      const status = r ? 'Лучший результат: ' + r.best + ' из ' + r.max : 'Не начат';
+      return { num: String(i + 1).padStart(2, '0'), heb: b.heb, title: R(b.title), teaser: R(b.teaser), weak: weak.indexOf(b.id) > -1, locked, meta: locked ? cnt : status + ' · ' + cnt, onOpen: () => this.openBlock(b.id) };
+    });
+    const fu = this.finalUnlocked();
+    o.finalLockTag = demo; o.finalClosedTag = !demo && !fu; o.startFinal = this.startFinal;
+    o.finalMeta = demo ? 'Только в полной версии' : (!fu ? 'Откроется после четырёх блоков' : (st.final ? 'Лучший результат: ' + st.final.best + ' из ' + st.final.max : 'Можно проходить'));
+
+    const cb = this.blockById(S.curBlock);
+    const ruleB = o.isIntro ? cb : (o.hasRuleBtn ? this.blockById(s.blockId) : null);
+    Object.assign(o, ruleB ? this.ruleVals(ruleB) : { rLead: '', rHasTr: false, rTr: '', rPairs: [], rHasTable: false, rTableTitle: '', rTwo: false, rWide: false, rRows: [], rHasNotes: false, rNotes: [] });
+    o.introNum = cb ? 'Блок ' + (B.indexOf(cb) + 1) + ' из ' + B.length : ''; o.introTitle = cb ? R(cb.title) : ''; o.introHeb = cb ? R(C.HEBM[cb.id] || cb.heb) : '';
+    o.lockHeb = o.introHeb; o.lockTitle = o.introTitle;
+    o.waitText = R('Он откроется, когда ты пройдёшь все четыре блока хотя бы по разу. Осталось: ' + B.filter((b) => !st.blocks[b.id]).map((b) => b.title).join(', ') + '.');
+
+    Object.assign(o, { dots: [], hasCaption: false, caption: '', isChoice: false, isBank: false, ans: S.ans, hasQ: false, hasPrompt: false, qPre: '', qPost: '', gapNode: '', promptNode: '', opts: [], ok: false, notOk: false, hasCorrectLine: false, correctHe: '', hasRu: false, ruNode: '', whyNode: '', showVoiceQ: false, voiceQ: null, bankTitle: '', lines: [], chips: [], bankAllOk: false, bankNotAll: false, bankVerdict: '', trayOn: false, hasPrev: false, onPrev: this.prev, barRef: this.barRef });
+    o.showBar = false; o.barOn = false; o.barOff = false; o.bar2 = false; o.barLabel = ''; o.bar2Label = ''; o.onBar = null; o.onBar2 = null;
+    const bar = (label, fn, enabled) => { o.showBar = true; o.barLabel = label; o.onBar = this.press(fn); o.barOn = enabled !== false; o.barOff = enabled === false; };
+    const bar2 = (label, fn) => { o.showBar = true; o.bar2 = true; o.bar2Label = label; o.onBar2 = fn; };
+
+    if (o.isIntro && cb) {
+      const items = this.itemsFor(cb);
+      const rs = (st.resumes || {})[cb.id];
+      if (rs) { bar('Продолжить · задание ' + (rs.i + 1) + ' из ' + rs.n, () => this.resumeBlock(cb.id)); bar2('Сначала', this.startBlock); }
+      else bar((demo && cb.id === C.DEMO_BLOCK) ? 'Начать демо · ' + C.DEMO_LIMIT + ' из ' + this.blockUnits(cb) : 'Начать · ' + this.maxFor(items) + ' заданий', this.startBlock);
+    }
+    o.hasBlockReset = o.isIntro && !!cb && (!!st.blocks[cb.id] || !!(st.resumes || {})[cb.id]);
+    o.confirmBlock = S.confirmBlock; o.notConfirmBlock = !S.confirmBlock; o.askBlockReset = this.askBlockReset; o.cancelBlockReset = this.cancelBlockReset; o.doBlockReset = this.doBlockReset;
+    if (o.isSession) {
+      const it = s.items[s.i], cur = s.cur, done = this.answered(), last = s.i === s.items.length - 1, early = s.kind === 'block' || s.kind === 'review';
+      const DC = { ok: 'var(--ok)', bad: 'var(--bad)', part: 'var(--marker)', now: 'var(--ink)', '': 'var(--dim)' };
+      o.dots = s.items.map((_, k) => { let c = ''; if (k === s.i) c = done ? (s.marks[k] || '') : 'now'; else if (s.marks[k]) c = s.marks[k]; return { st: { width: (k === s.i ? 22 : 8) + 'px', height: '8px', borderRadius: '4px', background: DC[c], transition: 'width .45s cubic-bezier(.3,1.4,.5,1), background-color .35s ease' } }; });
+      o.hasStreak = done && cur.picked === it.a && (s.streak || 0) >= 3 && s.i === s.curs.length - 1; o.streakText = (s.streak || 0) + ' подряд';
+      o.hasCaption = s.kind === 'diag' || s.kind === 'final';
+      o.caption = s.kind === 'final' ? 'Итоговый тест. Вопросы из всех блоков вперемешку, без подсказок.' : 'Диагностика. Без подсказок, как в жизни.';
+      o.whyNode = R(it.why);
+      if (it.t === 'choice') {
+        const ok = done && cur.picked === it.a;
+        o.isChoice = true; o.hasQ = !!it.q; o.hasPrompt = !it.q;
+        if (it.q) { const parts = it.q.split('___'); o.qPre = parts[0]; o.qPost = parts[1] || ''; o.gapNode = this.gapNode(done ? it.opts[it.a] : null); }
+        o.promptNode = R(it.prompt || '');
+        o.opts = cur.order.map((x) => ({ text: x.o, idle: !done, correct: done && x.idx === it.a, wrong: done && x.idx === cur.picked && x.idx !== it.a, dim: done && x.idx !== it.a && x.idx !== cur.picked, onPick: () => this.pick(x.idx) }));
+        o.ok = ok; o.notOk = done && !ok; o.hasCorrectLine = done && !ok && !it.q; o.correctHe = it.opts[it.a];
+        o.hasRu = !!it.ru; o.ruNode = R(it.ru || '');
+        o.showVoiceQ = this.voiceOn() && (done || early); o.voiceQ = () => this.voice(this.idFor(it));
+      } else {
+        o.isBank = true; o.bankTitle = R(it.title);
+        const tgt = (cur.active !== null && cur.fill[cur.active] === null) ? cur.active : cur.fill.indexOf(null);
+        o.lines = it.sents.map((x, i) => {
+          const f = cur.fill[i], txt = f !== null ? cur.chips[f] : '', good = cur.checked && f !== null && cur.chips[f] === x.a;
+          return { pre: x.pre + ' ', post: (/^[.,!?]/.test(x.post) ? '' : ' ') + x.post, hint: R(x.hint), gEmpty: !cur.checked && f === null && tgt !== i, gSel: !cur.checked && f === null && tgt === i, gFilled: !cur.checked && f !== null, gOk: good, gNo: cur.checked && !good, text: txt, noText: txt || '\u00a0\u00a0\u00a0', fix: x.a, onGap: () => this.tapGap(i), voice: this.voiceOn() && (cur.checked || early), onVoice: () => this.voice('bank-' + x.pre) };
+        });
+        o.chips = cur.chips.map((c, k) => { const used = cur.checked || cur.fill.indexOf(k) > -1; return { text: c, free: !used, used, onTap: () => this.tapChip(k) }; });
+        const good = it.sents.filter((x, i) => cur.fill[i] !== null && cur.chips[cur.fill[i]] === x.a).length;
+        o.bankAllOk = cur.checked && good === it.sents.length; o.bankNotAll = cur.checked && !o.bankAllOk; o.bankVerdict = 'Верно ' + good + ' из ' + it.sents.length;
+        if (!cur.checked) { o.trayOn = true; bar('Проверить', this.check, cur.fill.every((x) => x !== null)); }
+      }
+      if (done) bar(last ? 'К результату' : 'Дальше', this.next);
+      o.hasPrev = s.i > 0 && !!s.curs[s.i - 1]; if (o.hasPrev) o.showBar = true;
+    }
+
+    o.shown = S.shown; o.scKicker = ''; o.scHeb = ''; o.hasScHeb = false; o.scMax = 0; o.scMsg = ''; o.segs = []; o.hasSegs = false;
+    o.diagChips = []; o.fChips = []; o.hasCmp = false; o.noCmp = false; o.dPctText = ''; o.fPctText = ''; o.dBar = {}; o.fBar = {};
+    o.misses = []; o.hasMisses = false;
+    const segsOf = (sess) => sess.items.map((_, k) => { const c = sess.marks[k]; return { ok: c === 'ok', part: c === 'part', bad: c !== 'ok' && c !== 'part' }; });
+    if (o.isResult) {
+      const b = this.blockById(s.blockId), pct = s.points / s.max;
+      o.scKicker = s.kind === 'review' ? 'Повтор ошибок' : 'Результат блока'; o.scHeb = b ? b.heb : ''; o.hasScHeb = !!b; o.scMax = s.max;
+      o.scMsg = pct >= 0.9 ? 'Блок закрыт.' : (pct >= 0.6 ? 'Хороший результат. Ошибки разобраны ниже.' : 'Перечитай правило и пройди блок ещё раз.');
+      o.segs = segsOf(s); o.hasSegs = true;
+      o.misses = s.missed.map((m) => this.missVals(m));
+      const demoEnd = demo && s.blockId === C.DEMO_BLOCK;
+      if (s.missed.length) { bar('Повторить ошибки', this.review); if (!demoEnd && s.kind !== 'review') bar2('Заново', this.again); else if (s.kind === 'review') bar2('К блокам', this.goHome); }
+      else if (!demoEnd) { bar('К блокам', this.goHome); if (s.kind !== 'review') bar2('Заново', this.again); }
+    }
+    if (o.isDiagRes) {
+      const d = st.diag, dweak = d.weak || [];
+      o.scKicker = 'Диагностика'; o.scMax = C.DIAG.length;
+      o.scMsg = dweak.length ? R('Слабое место: ' + this.blockById(dweak[0]).title + '. С него и начни.') : 'Ошибок нет. Задания в блоках сложнее, начни с любого.';
+      if (s && s.kind === 'diag') { o.segs = segsOf(s); o.hasSegs = true; o.misses = s.missed.map((m) => this.missVals(m)); }
+      o.diagChips = B.map((b) => ({ heb: b.heb, bad: dweak.indexOf(b.id) > -1, ok: dweak.indexOf(b.id) < 0 }));
+      const target = dweak.length ? dweak[0] : B[0].id;
+      bar(dweak.length ? 'Открыть этот блок' : 'Открыть первый блок', () => this.openBlock(target)); bar2('Все блоки', this.goHome);
+    }
+    if (o.isFinalRes) {
+      const d = st.diag, pct = s.points / s.max;
+      o.scKicker = 'Итоговый тест'; o.scMax = s.max;
+      o.scMsg = pct >= 0.9 ? 'Тест закрыт.' : (pct >= 0.7 ? 'Хороший результат. Ошибки разобраны ниже.' : 'Вернись к блокам с ошибками и пройди тест ещё раз.');
+      o.segs = segsOf(s); o.hasSegs = true;
+      o.hasCmp = !!d; o.noCmp = !d;
+      if (d) {
+        const dp = Math.round(d.correct / C.DIAG.length * 100), fp = Math.round(pct * 100);
+        o.dPctText = d.correct + ' из ' + C.DIAG.length; o.fPctText = s.points + ' из ' + s.max;
+        o.dBar = { width: Math.max(dp, 2) + '%', height: '100%', background: 'var(--ink3)', borderRadius: '4px', transition: 'width .8s' };
+        o.fBar = { width: Math.max(fp, 2) + '%', height: '100%', background: 'var(--marker)', borderRadius: '4px', transition: 'width .8s' };
+      }
+      o.fChips = B.map((b) => { const x = s.fb[b.id] || { ok: 0, total: 0 }, bad = x.ok < x.total - 1; return { heb: b.heb, txt: x.ok + ' из ' + x.total, bad, ok: !bad }; });
+      o.misses = s.missed.map((m) => this.missVals(m));
+      bar('Пройти заново', this.startFinal); bar2('К блокам', this.goHome);
+    }
+    o.hasMisses = o.misses.length > 0;
+    if (o.isFinalWait) bar('К блокам', this.goHome);
+
+    o.showPaywall = o.isLock || o.isLockFinal || (o.isResult && demo && s.blockId === C.DEMO_BLOCK);
+    const doneN = st.blocks[C.DEMO_BLOCK] ? C.DEMO_LIMIT : 0;
+    o.pwTitle = doneN ? 'Ты прошёл ' + doneN + ' из ' + total : 'В демо ' + C.DEMO_LIMIT + ' заданий из ' + total;
+    o.pwBar = { width: Math.max(doneN / total * 100, 2) + '%', height: '100%', background: 'var(--marker)', borderRadius: '5px' };
+    o.pwTotalLine = total + ' заданий с переводом и разбором';
+
+    o.isWelcome = v === 'welcome'; o.showTop = !o.isWelcome;
+    if (o.isWelcome) { o.isHome = false; o.notHome = false; }
+    o.w1 = o.isWelcome && S.step === 0; o.w2 = o.isWelcome && S.step === 1; o.w3 = o.isWelcome && S.step === 2;
+    o.wNotLast = S.step < 2; o.wStepText = 'Шаг ' + (S.step + 1) + ' из 3';
+    o.wDots = [0, 1, 2].map((k) => ({ on: k === S.step, off: k !== S.step }));
+    o.wLabel = S.step < 2 ? 'Дальше' : (st.diag ? 'На главную' : 'Начать с диагностики');
+    o.wNext = this.wNext; o.wSkip = this.wSkip;
+    o.w3Text = demo ? 'В демо открыт первый блок, 5 заданий. Остальные блоки и итоговый тест входят в полную версию.' : 'Ошибки можно повторить сразу после блока. Когда пройдёшь все четыре блока, откроется итоговый тест, и его результат сравнится с диагностикой.';
+
+    const doneBlocks = B.filter((b) => st.blocks[b.id]).length;
+    const bestSum = B.reduce((n, b) => n + (st.blocks[b.id] ? st.blocks[b.id].best : 0), 0);
+    o.progDone = 'Блоков пройдено: ' + doneBlocks + ' из ' + B.length;
+    o.progPoints = 'Лучшие результаты: ' + bestSum + ' из ' + total + ' заданий';
+    o.progSegs = B.map((b, i) => { const r = st.blocks[b.id], p = r ? r.best / r.max : 0; return { num: String(i + 1).padStart(2, '0'), fill: { width: (p * 100) + '%', height: '100%', background: 'var(--marker)', borderRadius: '4px' } }; });
+    const rsm = this.latestResume(st), rb = rsm && this.blockById(rsm.blockId);
+    o.hasResume = !!rb; o.resumeBlock = this.resumeBlock;
+    o.resumeLabel = rb ? R('Продолжить: ' + rb.title) : ''; o.resumeSub = rb ? 'Задание ' + (rsm.i + 1) + ' из ' + rsm.n : '';
+    const nt = rb ? null : this.nextTarget(st);
+    o.hasNextCta = !!nt;
+    o.nextLabel = !nt ? '' : nt.type === 'weak' ? R('Слабое место: ' + nt.b.title) : nt.type === 'block' ? R('Следующий блок: ' + nt.b.title) : nt.type === 'final' ? 'Итоговый тест' : 'Что в полной версии';
+    o.nextGo = !nt ? null : (nt.type === 'weak' || nt.type === 'block') ? () => this.openBlock(nt.b.id) : nt.type === 'final' ? this.startFinal : () => this.openBlock(B.filter((b) => this.isLocked(b))[0].id);
+
+    o.celebrate = this.isCelebrate(); o.confettiNode = o.celebrate ? this.confettiNode() : null;
+    o.showSettings = S.settings; o.openSettings = this.openSettings; o.closeSettings = this.closeSettings;
+    o.lightOn = !S.dark; o.darkOn = S.dark; o.setLight = this.setLight; o.setDark = this.setDark;
+    o.sfxOn = S.sfx !== false; o.sfxOff = S.sfx === false; o.sfxOnStr = o.sfxOn ? 'true' : 'false'; o.toggleSfx = this.toggleSfx;
+    ['startDiag', 'resumeBlock', 'wNext', 'nextGo'].forEach((key) => { if (o[key]) o[key] = this.press(o[key]); });
+    const rr = [];
+    if (st.diag) rr.push({ key: 'diag', label: 'Диагностика', warn: 'Удалится результат диагностики. Пройти её можно заново.' });
+    B.forEach((b, i) => { if (st.blocks[b.id] || (st.resumes || {})[b.id]) rr.push({ key: b.id, label: R('Блок ' + (i + 1) + ' · ' + b.title), warn: 'Удалятся результат блока и место, где ты остановился.' }); });
+    if (st.final) rr.push({ key: 'final', label: 'Итоговый тест', warn: 'Удалится лучший результат итогового теста.' });
+    if (rr.length > 1) rr.push({ key: 'all', label: 'Всё сразу', warn: 'Удалятся результаты диагностики, всех блоков и итогового теста. Отменить это нельзя.' });
+    o.resetRows = rr.map((r) => Object.assign(r, { idle: S.confirmReset !== r.key, asking: S.confirmReset === r.key, onAsk: () => this.askReset(r.key), onDo: this.doReset }));
+    o.hasResetRows = rr.length > 0; o.noResetRows = !rr.length; o.cancelReset = this.cancelReset;
+    o.confirmQuit = S.confirmQuit; o.cancelQuit = this.cancelQuit; o.doQuit = this.doQuit; o.quitTitle = s && s.kind === 'final' ? 'Выйти из итогового теста?' : 'Выйти из диагностики?';
+    o.showWelcome = this.showWelcome; o.showWelcome = this.showWelcome;
+    return o;
+  }
+}
+</script>
+</body>
+</html>
